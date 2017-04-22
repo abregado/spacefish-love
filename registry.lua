@@ -21,3 +21,4 @@ scenes.play = require("scenes.play")
 BODY_SPEED_MODIFIER = 100
 GLOBAL_CENTREPOINT_X = lg.getWidth()/2
 GLOBAL_CENTREPOINT_Y = lg.getHeight()/2
+ZOOM_LEVELS = {0.25,0.5,1,2}

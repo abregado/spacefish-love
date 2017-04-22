@@ -2,7 +2,11 @@ local fish = {}
 
 function fish.new()
 	local f = {}
+	--properties
 	f.pos = {x=0,y=0}
+	--methods
+	f.move = fish.move
+	f.teleport = fish.teleport
 	return f
 end
 

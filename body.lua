@@ -24,5 +24,11 @@ function body.pos(self,timepoint)
 	end
 end
 
+function body.draw(self,timepoint)
+	local pos = body.pos(self,timepoint)
+	lg.setColor(self.color)
+	lg.circle("fill",pos.x,pos.y,10*self.size,30)
+end
+
 return body
 
