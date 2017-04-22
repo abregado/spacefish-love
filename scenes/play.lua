@@ -89,6 +89,17 @@ function play:draw()
 	--Draw game world
 	play.camera:attach()
 	
+	--draw locked indicator
+	if play.orbitlock then
+		lg.setColor(255,0,0)
+		lg.line(
+			play.fish.pos.x,
+			play.fish.pos.y,
+			play.fish.pos.x - play.locked_pos.x,
+			play.fish.pos.y - play.locked_pos.y
+			)
+	end
+	
 	--draw orbit rings
 	for i, planet in ipairs(play.planets) do
 		if planet.parent == play.planets[1] then

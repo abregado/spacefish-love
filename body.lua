@@ -37,7 +37,7 @@ function body.draw(self,timepoint)
 	local pos = body.pos(self,timepoint)
 	lg.setColor(self.color)
 	lg.circle("fill",pos.x,pos.y,10*self.size,30)
-	
+
 	if self.parent then
 		local diameter = self.size*10
 		local ratio = diameter/128
