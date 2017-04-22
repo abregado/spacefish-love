@@ -3,6 +3,9 @@ play = {}
 play.planets = {}
 play.fish = nil
 play.zoom = 1
+play.orbitlock = false
+play.locked_to = nil
+play.locked_pos = {x=20,y=20}
 
 function play:enter()
 	print("Building World")
@@ -10,20 +13,21 @@ function play:enter()
 	local sun = Body.new(nil)
 	table.insert(planets,sun)
 	planets[1].color = {244,191,0}
-	planets[1].size = 8
+	planets[1].size = 16
 	--planets[3].distance = 30
 	--planets[3].speed = 500
 	--planets[3].size = 0.25	
 	
-	local distance = 100
-	for p = 0, 25 do
-		distance = distance + math.random(150,250)
+	local distance = 300
+	for p = 0, 10 do
+		distance = distance + math.random(350,550)
 		local newplanet = Body.new(sun,
 			distance, --orbital distance
-			20+math.random(1,10), --orbital speed
+			1+math.random(1,2), --orbital speed
 			math.pi*2*math.random(), --random starting offset
-			1+(2*math.random()), --size
-			{171,191,0} --color
+			4+(2*math.random()), --size
+			{171,191,0},
+			true --color
 			)
 		table.insert(planets,newplanet)
 	end
@@ -56,6 +60,15 @@ function play:enter()
 	play.fish = Fish.new()
 	play.camera = Camera(play.fish.pos.x,play.fish.pos.y,ZOOM_LEVELS[play.zoom])
 
+end
+
+function play:keypressed(key)
+	if key == "space" then
+		play.orbitlock = not play.orbitlock
+	end
+	if play.orbitlock then
+		play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
+	end
 end
 
 function play:mousepressed(x,y,button)
@@ -101,6 +114,13 @@ function play:draw()
 	local mx,my = play.camera:mousePosition()
 	mx,my = math.floor(mx), math.floor(my)
 	lg.print(mx..","..my,0,30)
+	if play.orbitlock then
+		lg.setColor(255,0,0)
+		lg.print("movement locked to body",0,45)
+	else
+		lg.setColor(0,255,0)
+		lg.print("movement free",0,45)
+	end
 end
 
 function play:update(dt)
@@ -108,7 +128,15 @@ function play:update(dt)
 	
 	local mx,my = play.camera:mousePosition()
 	
-	play.camera:lockPosition(play.fish.pos.x,play.fish.pos.y, Camera.smooth.damped(0.3))
+	play.camera:lockPosition(play.fish.pos.x,play.fish.pos.y, CAMERA_SMOOTHER)
+	
+	if play.orbitlock and play.locked_to then
+		local lock_point = Body.pos(play.locked_to,timepoint)
+		play.fish.pos = {
+			x= lock_point.x + play.locked_pos.x,
+			y= lock_point.y + play.locked_pos.y
+			}
+	end
 end
 
 return play

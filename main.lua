@@ -6,7 +6,6 @@ function love.load()
 end
 
 function love.draw()
-	love.graphics.print("Love is working")
 end
 
 function love.update(dt)

@@ -1,6 +1,6 @@
 local body = {}
 
-function body.new(parent,distance,speed,offset,size,color)
+function body.new(parent,distance,speed,offset,size,color,isPlanet)
 	local b = {}
 	b.parent = parent
 	b.distance = distance or 100
@@ -8,7 +8,16 @@ function body.new(parent,distance,speed,offset,size,color)
 	b.offset = offset or 0
 	b.size = size or 1
 	b.color = color or {255,255,255}
-	
+	b.isPlanet = isPlanet or false
+	if b.size < 1 then
+		b.layers = {2}
+	else
+		b.layers = {}
+		b.layers[1] = math.random(1,#assets.planet_layers[1])
+		b.layers[2] = math.random(0,#assets.planet_layers[2])
+		b.layers[3] = math.random(0,#assets.planet_layers[3])
+		b.layers[4] = math.random(0,#assets.planet_layers[4])
+	end
 	return b
 end
 
@@ -28,6 +37,36 @@ function body.draw(self,timepoint)
 	local pos = body.pos(self,timepoint)
 	lg.setColor(self.color)
 	lg.circle("fill",pos.x,pos.y,10*self.size,30)
+	
+	if self.parent then
+		local diameter = self.size*10
+		local ratio = diameter/128
+		
+		lg.setColor(255,255,255)
+		for i, layer in ipairs(self.layers) do
+			if layer > 0 then
+				local image = assets.planet_layers[i][layer]
+				lg.draw(image,pos.x,pos.y,1,ratio,ratio,image:getWidth()/2,image:getHeight()/2)
+			end
+		end
+		
+	end
+end
+
+function body.findNearest(bodies,pos,timepoint)
+	local nearest = {body=nil,pos=nil,dist=1000}
+	for i, planet in ipairs(bodies) do
+		if planet.isPlanet then
+			local p_pos = body.pos(planet,timepoint)
+			local dist = Vector.dist(p_pos.x,p_pos.y,pos.x,pos.y)
+			if dist < nearest.dist then
+				nearest.body = planet
+				nearest.dist = dist
+				nearest.pos = p_pos
+			end
+		end
+	end
+	return nearest.body, {x=pos.x - nearest.pos.x, y=pos.y- nearest.pos.y}
 end
 
 return body
