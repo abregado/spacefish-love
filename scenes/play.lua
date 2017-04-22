@@ -114,6 +114,7 @@ function play:draw()
 		Body.draw(planet,timepoint)
 	end
 	
+	Fish.draw(play.fish)
 	lg.setColor(255,206,32)
 	lg.circle("line",play.fish.pos.x,play.fish.pos.y,30,3)
 	

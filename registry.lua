@@ -46,3 +46,94 @@ assets.planet_layers[4] = {
 	lg.newImage("assets/P_Top2_1_Asteroids.png"),
 	lg.newImage("assets/P_Top2_2_Satelites.png")
 	}
+
+
+assets.monster = {}
+assets.monster.body = {}
+assets.monster.head = {}
+assets.monster.eyes = {}
+assets.monster.mouth = {}
+assets.monster.arms = {}
+assets.monster.legs = {}
+assets.monster.tail = {}
+assets.monster.cap = {}
+
+function newPartType(part,layers)
+	--TODO: generate the filesnames based on a single string
+	local part_type = {}
+	for i, layer in ipairs(layers) do
+		table.insert(part_type,lg.newImage(layer))
+	end
+	table.insert(assets.monster[part],part_type)
+end
+
+newPartType("body",{
+	"assets/M_Body_1_Crab_Background.png",
+	"assets/M_Body_1_Crab_Outline.png",
+	"assets/M_Body_1_Crab_Color.png",
+	"assets/M_Body_1_Crab_Detail.png"
+	})
+
+newPartType("head",{
+	"assets/M_Head_1_Template_Background.png",
+	"assets/M_Head_1_Template_Background.png",
+	"assets/M_Head_1_Template_Background.png",
+	"assets/M_Head_1_Template_Background.png"
+	})
+	
+newPartType("arms",{
+	"assets/M_Arm_1_Template_Background.png",
+	"assets/M_Arm_1_Template_Background.png",
+	"assets/M_Arm_1_Template_Background.png",
+	"assets/M_Arm_1_Template_Background.png"
+	})
+	
+newPartType("mouth",{
+	"assets/M_Mouth_1_Template_Background.png",
+	"assets/M_Mouth_1_Template_Background.png",
+	"assets/M_Mouth_1_Template_Background.png",
+	"assets/M_Mouth_1_Template_Background.png"
+	})
+	
+newPartType("legs",{
+	"assets/M_Leg_1_Template_Background.png",
+	"assets/M_Leg_1_Template_Background.png",
+	"assets/M_Leg_1_Template_Background.png",
+	"assets/M_Leg_1_Template_Background.png"
+	})
+	
+newPartType("cap",{
+	"assets/M_Cap_1_Template_Background.png",
+	"assets/M_Cap_1_Template_Background.png",
+	"assets/M_Cap_1_Template_Background.png",
+	"assets/M_Cap_1_Template_Background.png"
+	})
+	
+newPartType("tail",{
+	"assets/M_Tail_1_Template_Background.png",
+	"assets/M_Tail_1_Template_Background.png",
+	"assets/M_Tail_1_Template_Background.png",
+	"assets/M_Tail_1_Template_Background.png"
+	})
+	
+newPartType("eyes",{
+	"assets/M_Eyes_1_Template_Background.png",
+	"assets/M_Eyes_1_Template_Background.png",
+	"assets/M_Eyes_1_Template_Background.png",
+	"assets/M_Eyes_1_Template_Background.png"
+	})
+
+part_offsets = {
+	body = {x=0,y=0},
+	head = {x=512,y=0},
+	eyes = {x=512,y=0},
+	mouth = {x=732,y=0},
+	arms = {x=0,y=0},
+	legs = {x=0,y=0},
+	tail = {x=-512,y=0},
+	cap = {x=0,y=0}	
+	}
+
+colors = {
+	outline = {255,255,255}
+	}

@@ -34,6 +34,7 @@ function body.pos(self,timepoint)
 end
 
 function body.draw(self,timepoint)
+	--TODO: planet surfaces rotate to face the galactic centre
 	local pos = body.pos(self,timepoint)
 	lg.setColor(self.color)
 	lg.circle("fill",pos.x,pos.y,10*self.size,30)
