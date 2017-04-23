@@ -15,12 +15,12 @@ function play:enter()
 	local sun = Body.new(nil)
 	table.insert(planets,sun)
 	planets[1].color = {244,191,0}
-	planets[1].size = 16
+	planets[1].size = 50
 	--planets[3].distance = 30
 	--planets[3].speed = 500
 	--planets[3].size = 0.25	
 	
-	local distance = 300
+	local distance = 500
 	for p = 0, 10 do
 		distance = distance + math.random(350,550)
 		local newplanet = Body.new(sun,
@@ -77,8 +77,15 @@ end
 
 function play:mousepressed(x,y,button)
 	if button == 1 then
-	local mx,my = play.camera:mousePosition()
-	play.fish:teleport({x=mx,y=my})
+		local mx,my = play.camera:mousePosition()
+		--play.fish:teleport({x=mx,y=my})
+		local fvec = Vector(play.fish.pos.x,play.fish.pos.y)
+		local mvec = Vector(mx,my)
+		local direc =  mvec - fvec
+		direc = direc:trimmed(0.5)
+		play.fish.vector = play.fish.vector + direc
+	elseif button == 2 then
+		play.fish.vector = play.fish.vector /2
 	elseif button == 3 then
 		play.zoom = play.zoom + 1
 		if play.zoom > #ZOOM_LEVELS then play.zoom = 1 end
@@ -144,6 +151,12 @@ function play:update(dt)
 	
 	local mx,my = play.camera:mousePosition()
 	
+	local npos = Vector(play.fish.pos.x,play.fish.pos.y)
+	
+	npos = npos + play.fish.vector
+	local x,y = npos:unpack()
+	play.fish.pos = {x=x,y=y}
+	
 	play.camera:lockPosition(play.fish.pos.x,play.fish.pos.y, CAMERA_SMOOTHER)
 	
 	if play.orbitlock and play.locked_to then
@@ -153,6 +166,8 @@ function play:update(dt)
 			y= lock_point.y + play.locked_pos.y
 			}
 	end
+	
+	
 end
 
 return play

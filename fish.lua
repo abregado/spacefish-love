@@ -27,6 +27,7 @@ function fish.new()
 	f.canvas = lg.newCanvas(2048*2,2048*2)
 	f.color = {255,255,255}
 	f.scale = 0.15
+	f.vector = Vector(0,0)
 	--methods
 	f.move = fish.move
 	f.teleport = fish.teleport
@@ -176,7 +177,15 @@ function fish.render(self)
 end
 
 function fish.draw(self)
-	lg.draw(self.canvas,self.pos.x,self.pos.y,0,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
+	local pos = Vector(self.pos.x,self.pos.y)
+	local rot = pos:angleTo(self.vector)
+	local step = pos + self.vector*30
+	local nx,ny = step:unpack()
+	
+	lg.setColor(255,0,0)
+	lg.line(self.pos.x,self.pos.y,nx,ny)
+	
+	--lg.draw(self.canvas,self.pos.x,self.pos.y,rot,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
 	
 end
 

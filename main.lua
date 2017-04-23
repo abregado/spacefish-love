@@ -6,6 +6,8 @@ function love.load()
 end
 
 function love.draw()
+	lg.setColor(255,255,255)
+	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 0, 0)
 end
 
 function love.update(dt)
