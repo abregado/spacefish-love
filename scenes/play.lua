@@ -126,8 +126,8 @@ function play:draw()
 	end
 	
 	Fish.draw(play.fish)
-	lg.setColor(255,206,32)
-	lg.circle("line",play.fish.pos.x,play.fish.pos.y,30,3)
+	--lg.setColor(255,206,32)
+	--lg.circle("line",play.fish.pos.x,play.fish.pos.y,30,3)
 	
 	play.camera:detach()
 	

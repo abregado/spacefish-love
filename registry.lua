@@ -87,6 +87,7 @@ function newPartType(name1,name2,part)
 	for i, layer in ipairs(layers) do
 		table.insert(part_type,lg.newImage(layer))
 	end
+	part_type.detail = name2
 	table.insert(assets.monster[part],part_type)
 end
 

@@ -5,14 +5,14 @@ function fish.new()
 	--properties
 	f.pos = {x=0,y=0}
 	f.parts = {
-		body = {style=1,color={255,255,255}},
-		head = {style=1,color={255,255,255}},
-		eyes = {style=1,color={255,255,255}},
-		mouth = {style=1,color={255,255,255}},
-		arms = {style=1,color={255,255,255}},
-		legs = {style=1,color={255,255,255}},
-		tail = {style=1,color={255,255,255}},
-		cap = {style=1,color={255,255,255}}		
+		body = {style=1,color={255,255,255},outline=nil},
+		head = {style=1,color={255,255,255},outline=nil},
+		eyes = {style=1,color={255,255,255},outline=nil},
+		mouth = {style=1,color={255,255,255},outline=nil},
+		arms = {style=1,color={255,255,255},outline=nil},
+		legs = {style=1,color={255,255,255},outline=nil},
+		tail = {style=1,color={255,255,255},outline=nil},
+		cap = {style=1,color={255,255,255},outline=nil}		
 		}
 	f.detail = {
 		body = true,
@@ -55,6 +55,13 @@ function fish.randomize(self)
 			part.color = nil
 		end
 	end
+	
+	if math.random(1,10) > 3 then
+		self.color = {math.random(90,155),math.random(90,155),math.random(90,155)}
+	else
+		self.color = nil
+	end
+	
 	fish.render(self)
 end
 
@@ -65,49 +72,6 @@ end
 
 function fish.teleport(self,pos)
 	self.pos = pos
-end
-
-function fish.drawPart(self,part,flip)
-	local poff = {x= part_offsets[part].x, y = part_offsets[part].y }
-	if flip then
-		poff = {x= part_offsets[part].x , y= part_offsets[part].y * -1 }	
-	end
-	
-	local vflip = 1 
-	local hflip = 1 
-	if flip then vflip = -1  end
-	
-	if self.parts[part].style > 0 then
-		--draw background
-		lg.setBlendMode("alpha")
-		lg.setColor(255,255,255)
-		local background = assets.monster[part][self.parts[part].style][1]
-		local ox,oy = background:getWidth()/2, background:getHeight()/2
-		lg.draw(background,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
-		
-		if self.parts[part].color then
-			--draw color layer (2)
-			local colorlayer = assets.monster[part][self.parts[part].style][3]
-			lg.setBlendMode("add")
-			lg.setColor(self.color)
-			lg.draw(colorlayer,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
-			lg.draw(colorlayer,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
-		end
-		
-		lg.setBlendMode("alpha")
-		local outline = assets.monster[part][self.parts[part].style][2]
-		lg.setColor(colors.outline)
-		lg.draw(outline,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
-		
-		if self.detail[part] == true then
-			--draw detail layer (4)
-			lg.setBlendMode("alpha")
-			local detail = assets.monster[part][self.parts[part].style][4]
-			lg.setColor(255,255,255)
-			lg.draw(detail,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
-		
-		end
-	end
 end
 
 function fish.drawPartInPlace(self,part,flip)
@@ -142,7 +106,11 @@ function fish.drawPartInPlace(self,part,flip)
 		
 		lg.setBlendMode("alpha")
 		local outline = assets.monster[part][self.parts[part].style][2]
-		lg.setColor(colors.outline)
+		if self.color then
+			lg.setColor(self.color)
+		else
+			lg.setColor(colors.outline)
+		end
 		lg.draw(outline,poff.x,poff.y,0,hflip,vflip,ox,oy)
 		
 		if self.detail[part] then
@@ -194,8 +162,8 @@ function fish.draw(self)
 	
 	lg.setColor(255,255,255)
 	lg.draw(self.canvas,self.pos.x,self.pos.y,rot,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
-	lg.setColor(255,0,0)
-	lg.line(self.pos.x,self.pos.y,nx,ny)
+	--lg.setColor(255,0,0)
+	--lg.line(self.pos.x,self.pos.y,nx,ny)
 end
 
 return fish
