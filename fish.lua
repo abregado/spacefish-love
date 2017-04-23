@@ -36,10 +36,10 @@ function fish.new()
 end
 
 function fish.randomize(self)
-	self.parts.arms = math.random(0,1)
-	self.parts.legs = math.random(0,1)
-	self.parts.tail = math.floor(math.random(0,1))
-	self.parts.cap = self.parts.tail
+	self.parts.arms = math.random(1,#assets.monster.arms)
+	self.parts.legs = math.random(1,#assets.monster.legs)
+	self.parts.tail = math.random(1,#assets.monster.tail)
+	self.parts.cap = 1
 	for i, part in pairs(self.detail) do
 		if math.random(1,6) >= 5 then
 			self.detail[i] = true
@@ -152,6 +152,7 @@ end
 
 function fish.render(self)
 	lg.setCanvas(self.canvas)
+	lg.clear()
 
 	--draw tailsegments
 	fish.drawPartInPlace(self,"tail")

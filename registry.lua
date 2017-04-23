@@ -44,18 +44,22 @@ assets.planet_layers[1] = {
 assets.planet_layers[2] = {
 	lg.newImage("assets/P_Detail_1_City.png"),
 	lg.newImage("assets/P_Detail_2_Vulcano.png"),
-	lg.newImage("assets/P_Detail_1_Corruption.png")
+	lg.newImage("assets/P_Detail_1_Corruption.png"),
+	lg.newImage("assets/P_Detail_3_Corruption.png"),
+	lg.newImage("assets/P_Detail_4_Electric.png")
 	}
 
 assets.planet_layers[3] = {
 	lg.newImage("assets/P_Top1_1_Clouds.png"),
-	lg.newImage("assets/P_Top1_2_Clouds.png")
+	lg.newImage("assets/P_Top1_2_Clouds.png"),
+	lg.newImage("assets/P_Top1_3_Rainbow.png")
 	}
 
 assets.planet_layers[4] = {
 	lg.newImage("assets/P_Top2_1_Asteroids.png"),
 	lg.newImage("assets/P_Top2_1_Corruption.png"),
-	lg.newImage("assets/P_Top2_2_Satelites.png")
+	lg.newImage("assets/P_Top2_2_Satelites.png"),
+	lg.newImage("assets/P_Top2_2_Butterflies.png")
 	}
 
 
@@ -73,10 +77,10 @@ assets.monster.cap = {}
 function newPartType(name1,name2,part)
 	--TODO: generate the filesnames based on a single string
 	local layers = {
-		"assets/M_"..name1.."_1_"..name2.."_Background.png",
-		"assets/M_"..name1.."_1_"..name2.."_Outline.png",
-		"assets/M_"..name1.."_1_"..name2.."_Color.png",
-		"assets/M_"..name1.."_1_"..name2.."_Detail_Purple.png"
+		"assets/M_"..name1.."_Background.png",
+		"assets/M_"..name1.."_Outline.png",
+		"assets/M_"..name1.."_Color.png",
+		"assets/M_"..name1.."_Detail_"..name2..".png"
 		}
 	local part_type = {}
 	for i, layer in ipairs(layers) do
@@ -85,21 +89,27 @@ function newPartType(name1,name2,part)
 	table.insert(assets.monster[part],part_type)
 end
 
-newPartType("Body","Crab","body")
+newPartType("Body_1_Crab","Purple","body")
 
-newPartType("Head","Crab","head")
+newPartType("Head_1_Crab","Purple","head")
 	
-newPartType("Arm","Crab","arms")
+newPartType("Arm_1_Crab","Purple","arms")
+newPartType("Arm_1_Crab","Electric","arms")
 	
-newPartType("Mouth","Crab","mouth")
+newPartType("Mouth_1_Crab","Purple","mouth")
+newPartType("Mouth_1_Crab","Electric","mouth")
+newPartType("Mouth_2_Butterfly","Electric","mouth")
 	
-newPartType("Leg","Crab","legs")
+newPartType("Leg_1_Crab","Purple","legs")
+newPartType("Leg_1_Crab","Electric","legs")
+newPartType("Leg_2_Butterfly","Purple","legs")
 	
-newPartType("Cap","Crab","cap")
+newPartType("Cap_1_Crab","Purple","cap")
 	
-newPartType("Tail","Crab","tail")
+newPartType("Tail_1_Crab","Purple","tail")
+newPartType("Tail_2_Flesh","Purple","tail")
 	
-newPartType("Eyes","Crab","eyes")
+newPartType("Eyes_1_Crab","Purple","eyes")
 
 part_offsets = {
 	body = {x=0,y=0},
