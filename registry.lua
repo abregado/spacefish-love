@@ -7,6 +7,7 @@ VectorL = require("lib.hump.vector-light")
 Vector = require("lib.hump.vector")
 Tween = require("lib.tween.tween")
 Fish = require("fish")
+Logic = require("eat-logic")
 
 --API pointers
 lg = love.graphics

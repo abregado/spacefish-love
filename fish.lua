@@ -5,14 +5,14 @@ function fish.new()
 	--properties
 	f.pos = {x=0,y=0}
 	f.parts = {
-		body = 1,
-		head = 1,
-		eyes = 1,
-		mouth = 1,
-		arms = 1,
-		legs = 1,
-		tail = 1,
-		cap = 1		
+		body = {style=1,color={255,255,255}},
+		head = {style=1,color={255,255,255}},
+		eyes = {style=1,color={255,255,255}},
+		mouth = {style=1,color={255,255,255}},
+		arms = {style=1,color={255,255,255}},
+		legs = {style=1,color={255,255,255}},
+		tail = {style=1,color={255,255,255}},
+		cap = {style=1,color={255,255,255}}		
 		}
 	f.detail = {
 		body = true,
@@ -36,11 +36,11 @@ function fish.new()
 end
 
 function fish.randomize(self)
-	self.parts.arms = math.random(1,#assets.monster.arms)
-	self.parts.legs = math.random(1,#assets.monster.legs)
-	self.parts.tail = math.random(1,#assets.monster.tail)
-	self.parts.mouth = math.random(1,#assets.monster.mouth)
-	self.parts.cap = 1
+	self.parts.arms.style = math.random(1,#assets.monster.arms)
+	self.parts.legs.style = math.random(1,#assets.monster.legs)
+	self.parts.tail.style = math.random(1,#assets.monster.tail)
+	self.parts.mouth.style = math.random(1,#assets.monster.mouth)
+	self.parts.cap.style = 1
 	for i, part in pairs(self.detail) do
 		if math.random(1,6) >= 5 then
 			self.detail[i] = true
@@ -48,10 +48,12 @@ function fish.randomize(self)
 			self.detail[i] = false
 		end
 	end
-	if math.random(1,10) > 3 then
-		self.color = {math.random(0,255),math.random(0,255),math.random(0,255)}
-	else
-		self.color = nil
+	for i, part in pairs(self.parts) do
+		if math.random(1,10) > 3 then
+			part.color = {math.random(0,255),math.random(0,255),math.random(0,255)}
+		else
+			part.color = nil
+		end
 	end
 	fish.render(self)
 end
@@ -75,17 +77,17 @@ function fish.drawPart(self,part,flip)
 	local hflip = 1 
 	if flip then vflip = -1  end
 	
-	if self.parts[part] > 0 then
+	if self.parts[part].style > 0 then
 		--draw background
 		lg.setBlendMode("alpha")
 		lg.setColor(255,255,255)
-		local background = assets.monster[part][self.parts[part]][1]
+		local background = assets.monster[part][self.parts[part].style][1]
 		local ox,oy = background:getWidth()/2, background:getHeight()/2
 		lg.draw(background,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
 		
-		if self.color then
+		if self.parts[part].color then
 			--draw color layer (2)
-			local colorlayer = assets.monster[part][self.parts[part]][3]
+			local colorlayer = assets.monster[part][self.parts[part].style][3]
 			lg.setBlendMode("add")
 			lg.setColor(self.color)
 			lg.draw(colorlayer,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
@@ -93,14 +95,14 @@ function fish.drawPart(self,part,flip)
 		end
 		
 		lg.setBlendMode("alpha")
-		local outline = assets.monster[part][self.parts[part]][2]
+		local outline = assets.monster[part][self.parts[part].style][2]
 		lg.setColor(colors.outline)
 		lg.draw(outline,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
 		
 		if self.detail[part] == true then
 			--draw detail layer (4)
 			lg.setBlendMode("alpha")
-			local detail = assets.monster[part][self.parts[part]][4]
+			local detail = assets.monster[part][self.parts[part].style][4]
 			lg.setColor(255,255,255)
 			lg.draw(detail,self.pos.x + poff.x,self.pos.y + poff.y,0,hflip,vflip,ox,oy)
 		
@@ -119,32 +121,34 @@ function fish.drawPartInPlace(self,part,flip)
 	local hflip = 1 
 	if flip then vflip = -1  end
 	
-	if self.parts[part] > 0 then
+	print(part.." checking "..self.parts[part].style)
+	
+	if self.parts[part].style > 0 then
 		--draw background
 		lg.setBlendMode("alpha")
 		lg.setColor(255,255,255)
-		local background = assets.monster[part][self.parts[part]][1]
+		local background = assets.monster[part][self.parts[part].style][1]
 		local ox,oy = background:getWidth()/2, background:getHeight()/2
 		lg.draw(background,poff.x,poff.y,0,hflip,vflip,ox,oy)
 		
-		if self.color then
+		if self.parts[part].color then
 			--draw color layer (2)
-			local colorlayer = assets.monster[part][self.parts[part]][3]
+			local colorlayer = assets.monster[part][self.parts[part].style][3]
 			lg.setBlendMode("add")
-			lg.setColor(self.color)
+			lg.setColor(self.parts[part].color)
 			lg.draw(colorlayer,poff.x,poff.y,0,hflip,vflip,ox,oy)
 			lg.draw(colorlayer,poff.x,poff.y,0,hflip,vflip,ox,oy)
 		end
 		
 		lg.setBlendMode("alpha")
-		local outline = assets.monster[part][self.parts[part]][2]
+		local outline = assets.monster[part][self.parts[part].style][2]
 		lg.setColor(colors.outline)
 		lg.draw(outline,poff.x,poff.y,0,hflip,vflip,ox,oy)
 		
 		if self.detail[part] then
 			--draw detail layer (4)
 			lg.setBlendMode("alpha")
-			local detail = assets.monster[part][self.parts[part]][4]
+			local detail = assets.monster[part][self.parts[part].style][4]
 			lg.setColor(255,255,255)
 			lg.draw(detail,poff.x,poff.y,0,hflip,vflip,ox,oy)
 		
