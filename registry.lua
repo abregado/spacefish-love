@@ -67,8 +67,14 @@ assets.monster.legs = {}
 assets.monster.tail = {}
 assets.monster.cap = {}
 
-function newPartType(part,layers)
+function newPartType(name1,name2,part)
 	--TODO: generate the filesnames based on a single string
+	local layers = {
+		"assets/M_"..name1.."_1_"..name2.."_Background.png",
+		"assets/M_"..name1.."_1_"..name2.."_Outline.png",
+		"assets/M_"..name1.."_1_"..name2.."_Color.png",
+		"assets/M_"..name1.."_1_"..name2.."_Detail_Purple.png"
+		}
 	local part_type = {}
 	for i, layer in ipairs(layers) do
 		table.insert(part_type,lg.newImage(layer))
@@ -76,73 +82,35 @@ function newPartType(part,layers)
 	table.insert(assets.monster[part],part_type)
 end
 
-newPartType("body",{
-	"assets/M_Body_1_Crab_Background.png",
-	"assets/M_Body_1_Crab_Outline.png",
-	"assets/M_Body_1_Crab_Color.png",
-	"assets/M_Body_1_Crab_Detail.png"
-	})
+newPartType("Body","Crab","body")
 
-newPartType("head",{
-	"assets/M_Head_1_Template_Background.png",
-	"assets/M_Head_1_Template_Background.png",
-	"assets/M_Head_1_Template_Background.png",
-	"assets/M_Head_1_Template_Background.png"
-	})
+newPartType("Head","Crab","head")
 	
-newPartType("arms",{
-	"assets/M_Arm_1_Template_Background.png",
-	"assets/M_Arm_1_Template_Background.png",
-	"assets/M_Arm_1_Template_Background.png",
-	"assets/M_Arm_1_Template_Background.png"
-	})
+newPartType("Arm","Crab","arms")
 	
-newPartType("mouth",{
-	"assets/M_Mouth_1_Template_Background.png",
-	"assets/M_Mouth_1_Template_Background.png",
-	"assets/M_Mouth_1_Template_Background.png",
-	"assets/M_Mouth_1_Template_Background.png"
-	})
+newPartType("Mouth","Crab","mouth")
 	
-newPartType("legs",{
-	"assets/M_Leg_1_Template_Background.png",
-	"assets/M_Leg_1_Template_Background.png",
-	"assets/M_Leg_1_Template_Background.png",
-	"assets/M_Leg_1_Template_Background.png"
-	})
+newPartType("Leg","Crab","legs")
 	
-newPartType("cap",{
-	"assets/M_Cap_1_Template_Background.png",
-	"assets/M_Cap_1_Template_Background.png",
-	"assets/M_Cap_1_Template_Background.png",
-	"assets/M_Cap_1_Template_Background.png"
-	})
+newPartType("Cap","Crab","cap")
 	
-newPartType("tail",{
-	"assets/M_Tail_1_Template_Background.png",
-	"assets/M_Tail_1_Template_Background.png",
-	"assets/M_Tail_1_Template_Background.png",
-	"assets/M_Tail_1_Template_Background.png"
-	})
+newPartType("Tail","Crab","tail")
 	
-newPartType("eyes",{
-	"assets/M_Eyes_1_Template_Background.png",
-	"assets/M_Eyes_1_Template_Background.png",
-	"assets/M_Eyes_1_Template_Background.png",
-	"assets/M_Eyes_1_Template_Background.png"
-	})
+newPartType("Eyes","Crab","eyes")
 
 part_offsets = {
 	body = {x=0,y=0},
-	head = {x=512,y=0},
-	eyes = {x=512,y=0},
-	mouth = {x=732,y=0},
-	arms = {x=0,y=0},
-	legs = {x=0,y=0},
-	tail = {x=-512,y=0},
-	cap = {x=0,y=0}	
+	head = {x=550,y=0},
+	eyes = {x=550,y=0},
+	mouth = {x=550+210,y=0},
+	arms = {x=504,y=-512},
+	legs = {x=-210,y=-512},
+	tail = {x=-370-256,y=0},
+	cap = {x=-370-512,y=0}	
 	}
 
+
+
 colors = {
-	outline = {255,255,255}
+	outline = {125,125,125}
 	}

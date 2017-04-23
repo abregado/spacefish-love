@@ -8,6 +8,8 @@ play.locked_to = nil
 play.locked_pos = {x=20,y=20}
 
 function play:enter()
+	math.randomseed(os.time())
+	
 	print("Building World")
 	local planets = play.planets
 	local sun = Body.new(nil)
@@ -65,6 +67,8 @@ end
 function play:keypressed(key)
 	if key == "space" then
 		play.orbitlock = not play.orbitlock
+	elseif key == "p" then
+		Fish.randomize(play.fish)
 	end
 	if play.orbitlock then
 		play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
