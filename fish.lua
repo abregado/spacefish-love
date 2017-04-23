@@ -37,10 +37,12 @@ end
 
 function fish.randomize(self)
 	self.parts.arms.style = math.random(1,#assets.monster.arms)
+	self.parts.body.style = math.random(1,#assets.monster.body)
+	self.parts.eyes.style = math.random(1,#assets.monster.eyes)
 	self.parts.legs.style = math.random(1,#assets.monster.legs)
 	self.parts.tail.style = math.random(1,#assets.monster.tail)
 	self.parts.mouth.style = math.random(1,#assets.monster.mouth)
-	self.parts.cap.style = 1
+	self.parts.cap.style = self.parts.tail.style
 	for i, part in pairs(self.detail) do
 		if math.random(1,6) >= 5 then
 			self.detail[i] = true

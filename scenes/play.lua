@@ -66,31 +66,46 @@ end
 
 function play:keypressed(key)
 	if key == "space" then
-		play.orbitlock = not play.orbitlock
-	elseif key == "p" then
-		Fish.randomize(play.fish)
+		if play.orbitlock then
+			play.orbitlock = false
+			play.locked_to = nil
+			play.locked_pos = nil
+			play.fish.vector = play.fish.vector:trimmed(1)
+		else
+			play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
+			if play.locked_to then
+				play.orbitlock = true
+			end
+		end
 	elseif key == "1" then
 		Logic.addDetail(play.fish,"Purple")
+		Fish.render(play.fish)
 	elseif key == "2" then
 		Logic.addDetail(play.fish,"Electric")
+		Fish.render(play.fish)
 	elseif key == "3" then
 		Logic.mixStyle(play.fish)
+		Fish.render(play.fish)
 	elseif key == "4" then
 		Logic.chooseStyleChange(play.fish,{},1)
+		Fish.render(play.fish)
 	elseif key == "5" then
 		Logic.setAllDetail(play.fish,false)
+		Fish.render(play.fish)
 	elseif key == "6" then
 		Logic.rainbowChange(play.fish)
+		Fish.render(play.fish)
 	elseif key == "7" then
 		Logic.plainChange(play.fish)
+		Fish.render(play.fish)
+	elseif key == "8" then
+		Fish.randomize(play.fish)
+		Fish.render(play.fish)
 	end
 	
 	
-	Fish.render(play.fish)
 	
-	if play.orbitlock then
-		play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
-	end
+
 end
 
 function play:mousepressed(x,y,button)
@@ -169,20 +184,22 @@ function play:update(dt)
 	
 	local mx,my = play.camera:mousePosition()
 	
-	local npos = Vector(play.fish.pos.x,play.fish.pos.y)
-	
-	npos = npos + play.fish.vector
+	local fpos = Vector(play.fish.pos.x,play.fish.pos.y)
+	local npos = fpos + play.fish.vector
 	local x,y = npos:unpack()
-	play.fish.pos = {x=x,y=y}
 	
 	play.camera:lockPosition(play.fish.pos.x,play.fish.pos.y, CAMERA_SMOOTHER)
 	
 	if play.orbitlock and play.locked_to then
 		local lock_point = Body.pos(play.locked_to,timepoint)
+		local bpos = Vector(lock_point.x,lock_point.y)
 		play.fish.pos = {
 			x= lock_point.x + play.locked_pos.x,
 			y= lock_point.y + play.locked_pos.y
 			}
+		play.fish.vector = bpos - fpos
+	else
+		play.fish.pos = {x=x,y=y}
 	end
 	
 	

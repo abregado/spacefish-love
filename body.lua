@@ -55,7 +55,7 @@ function body.draw(self,timepoint)
 end
 
 function body.findNearest(bodies,pos,timepoint)
-	local nearest = {body=nil,pos={x=0,y=0},dist=100000}
+	local nearest = {body=nil,pos={x=0,y=0},dist=300}
 	for i, planet in ipairs(bodies) do
 		if planet.isPlanet then
 			local p_pos = body.pos(planet,timepoint)
