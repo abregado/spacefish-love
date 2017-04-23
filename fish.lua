@@ -39,6 +39,7 @@ function fish.randomize(self)
 	self.parts.arms = math.random(1,#assets.monster.arms)
 	self.parts.legs = math.random(1,#assets.monster.legs)
 	self.parts.tail = math.random(1,#assets.monster.tail)
+	self.parts.mouth = math.random(1,#assets.monster.mouth)
 	self.parts.cap = 1
 	for i, part in pairs(self.detail) do
 		if math.random(1,6) >= 5 then
@@ -142,8 +143,9 @@ function fish.drawPartInPlace(self,part,flip)
 		
 		if self.detail[part] then
 			--draw detail layer (4)
+			lg.setBlendMode("alpha")
 			local detail = assets.monster[part][self.parts[part]][4]
-			lg.setColor(125,125,125)
+			lg.setColor(255,255,255)
 			lg.draw(detail,poff.x,poff.y,0,hflip,vflip,ox,oy)
 		
 		end
