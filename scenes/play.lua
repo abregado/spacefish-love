@@ -69,7 +69,19 @@ function play:keypressed(key)
 		play.orbitlock = not play.orbitlock
 	elseif key == "p" then
 		Fish.randomize(play.fish)
+	elseif key == "1" then
+		Logic.addDetail(play.fish,"Purple")
+	elseif key == "2" then
+		Logic.addDetail(play.fish,"Electric")
+	elseif key == "3" then
+		Logic.mixStyle(play.fish)
+	elseif key == "4" then
+		Logic.chooseStyleChange(play.fish)
 	end
+	
+	
+	Fish.render(play.fish)
+	
 	if play.orbitlock then
 		play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
 	end

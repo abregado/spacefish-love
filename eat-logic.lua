@@ -20,10 +20,17 @@ function logic.changeStyle(fish,part,style)
 	fish.parts[part].style = style or 1
 end
 
+function logic.setDetail(fish,part,hasDetail)
+	--if no setting given then remove detail
+	fish.detail[part] = hasDetail or false
+end
+
 
 function logic.chooseStyleChange(fish,parts,style)
 	local parts = parts or {"body","head","eyes","mouth","arms","legs","tail","cap"}
+	local style = style or 1 
 	if #parts == 0 then parts = {"body","head","eyes","mouth","arms","legs","tail","cap"} end
+	
 	
 	--remove parts which are already this style
 	local removals = 0
@@ -36,16 +43,41 @@ function logic.chooseStyleChange(fish,parts,style)
 		for i, part in ipairs(parts) do
 			if fish.parts[part].style == style then
 				table.remove(parts,i)
+				removals = removals - 1
 				break
 			end
 		end
 	end
 	
+	--remove parts which dont have this style
+	removals = 0
+	for i, part in ipairs(parts) do
+		if assets.monster[part][style] then
+			--style exists so do nothing
+		else
+			removals = removals + 1
+		end
+	end
+	while removals > 0 do
+		for i, part in ipairs(parts) do
+			if assets.monster[part][style] then
+				--style exists so do nothing
+			else
+				table.remove(parts,i)
+				removals = removals - 1
+				break
+			end
+		end
+	end
+	
+	
 	if #parts > 0 then
 		local choice = math.random(1,#parts)
 		logic.changeStyle(fish,parts[choice],style)
+		return parts[choice]
 	else
 		print("couldnt find a valid part for style change")
+		return nil
 	end
 end
 
@@ -56,6 +88,7 @@ function logic.mixStyle(fish)
 		local style = math.random(1,#assets.monster[part])
 		logic.changeStyle(fish,part,style)
 	end
+	
 end
 
 function logic.changeColor(fish,part,color)
@@ -79,6 +112,7 @@ function logic.chooseColorChange(fish,parts,color)
 		for i, part in ipairs(parts) do
 			if fish.parts[part].color == color then
 				table.remove(parts,i)
+				removals = removals - 1
 				break
 			end
 		end
@@ -109,14 +143,72 @@ function logic.changeOutline(fish,color)
 	--if no color then nil
 end
 
-function logic.addCorruption(fish)
-
+function logic.addDetail(fish,detailType)
+	local parts = {{"body"},{"head"},{"eyes"},{"mouth"},{"arms"},{"legs"},{"tail"},{"cap"}}
+	local detailType = detailType or "Purple"
+	--local detailType = "Electric"
+	
+	--remove parts which have already got details (and thus cannot get detailed again)
+	local removals = 0
+	for i, part in ipairs(parts) do
+		if fish.detail[part[1]] == true then
+			--set the part to be removed
+			part[2] = true
+			print(part[1].." is already detailed, deleting")
+			removals = removals + 1
+		else
+			part[2] = false
+			print(part[1].." is can be detailed")
+		end
+	end
+	
+	while removals > 0 do
+		for i, part in ipairs(parts) do
+			if part[2] then
+				table.remove(parts,i)
+				removals = removals -1
+				break
+			end
+		end
+	end
+	print("addDetail parts remain after stage 1: "..#parts)
+	
+	--of the remaining parts, find those which have a corruptable option
+	removals = 0
+	for i, part in ipairs(parts) do
+		local style = fish.parts[part[1]].style
+		if assets.monster[part[1]][style].detail == detailType then
+			--its corruptable, leave it
+			print(part[1].." can become "..detailType)
+			part[2] = false
+		else
+			part[2] = true
+			removals = removals + 1
+			print(part[1].." cannot become "..detailType..", deleting")
+		end
+	end
+	
+	while removals > 0 do
+		for i, part in ipairs(parts) do
+			if part[2] == true then
+				table.remove(parts,i)
+				removals = removals -1
+				break
+			end
+		end
+	end
+	print("addDetail parts remain after stage 2: "..#parts)
+	
+	if #parts > 0 then
+		local choice = math.random(1,#parts)
+		logic.setDetail(fish,parts[choice][1],true)
+		return parts[choice][1]
+	else
+		print("couldnt find a valid part for detailing")
+		return nil
+	end
+	
 end
-
-function logic.addElectric(fish)
-
-end
-
 
 function logic.consumeBody(body,fish)
 	

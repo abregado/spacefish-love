@@ -8,14 +8,14 @@ function fish.new()
 		body = {style=1,color={255,255,255},outline=nil},
 		head = {style=1,color={255,255,255},outline=nil},
 		eyes = {style=1,color={255,255,255},outline=nil},
-		mouth = {style=1,color={255,255,255},outline=nil},
+		mouth = {style=2,color={255,255,255},outline=nil},
 		arms = {style=1,color={255,255,255},outline=nil},
-		legs = {style=1,color={255,255,255},outline=nil},
+		legs = {style=2,color={255,255,255},outline=nil},
 		tail = {style=1,color={255,255,255},outline=nil},
 		cap = {style=1,color={255,255,255},outline=nil}		
 		}
 	f.detail = {
-		body = true,
+		body = false,
 		head = false,
 		eyes = false,
 		mouth = false,
@@ -85,7 +85,7 @@ function fish.drawPartInPlace(self,part,flip)
 	local hflip = 1 
 	if flip then vflip = -1  end
 	
-	print(part.." checking "..self.parts[part].style)
+	--print(part.." checking "..self.parts[part].style)
 	
 	if self.parts[part].style > 0 then
 		--draw background
