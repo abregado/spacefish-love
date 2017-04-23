@@ -44,23 +44,23 @@ assets.planet_layers[1] = {
 
 assets.planet_layers[2] = {
 	{image = lg.newImage("assets/P_Detail_1_City.png")},
-	{image = lg.newImage("assets/P_Detail_2_Vulcano.png")},
-	{image = lg.newImage("assets/P_Detail_1_Corruption.png")},
-	{image = lg.newImage("assets/P_Detail_3_Corruption.png")},
-	{image = lg.newImage("assets/P_Detail_4_Electric.png")}
+	{image = lg.newImage("assets/P_Detail_2_Vulcano.png"), callback = function(fish) Logic.planet.vulcano(fish) end},
+	{image = lg.newImage("assets/P_Detail_1_Corruption.png"), callback = function(fish) Logic.planet.corruption(fish) end},
+	{image = lg.newImage("assets/P_Detail_3_Corruption.png"), callback = function(fish) Logic.planet.corruption(fish) end},
+	{image = lg.newImage("assets/P_Detail_4_Electric.png"), callback = function(fish) Logic.planet.electric(fish) end}
 	}
 
 assets.planet_layers[3] = {
-	{image = lg.newImage("assets/P_Top1_1_Clouds.png")},
-	{image = lg.newImage("assets/P_Top1_2_Clouds.png")},
+	{image = lg.newImage("assets/P_Top1_1_Clouds.png"), callback = function(fish) Logic.planet.clouds(fish) end},
+	{image = lg.newImage("assets/P_Top1_2_Clouds.png"), callback = function(fish) Logic.planet.clouds(fish) end},
 	{image = lg.newImage("assets/P_Top1_3_Rainbow.png"), callback = function(fish) Logic.rainbowChange(fish) end}
 	}
 
 assets.planet_layers[4] = {
 	{image = lg.newImage("assets/P_Top2_1_Asteroids.png")},
-	{image = lg.newImage("assets/P_Top2_1_Corruption.png")},
+	{image = lg.newImage("assets/P_Top2_1_Corruption.png"), callback = function(fish) Logic.planet.corruption(fish) end},
 	{image = lg.newImage("assets/P_Top2_2_Satelites.png")},
-	{image = lg.newImage("assets/P_Top2_2_Butterflies.png")}
+	{image = lg.newImage("assets/P_Top2_2_Butterflies.png"), callback = function(fish) Logic.planet.butterfly(fish) end}
 	}
 
 

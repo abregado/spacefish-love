@@ -29,8 +29,8 @@ end
 
 function logic.setAllDetail(fish,hasDetail)
 	local parts = {"body","head","eyes","mouth","arms","legs","tail","cap"}
-	for partname, part in ipairs(parts) do
-		logic.setDetail(fish,partname,hasDetail)
+	for i, part in ipairs(parts) do
+		logic.setDetail(fish,part,hasDetail)
 	end
 end
 
@@ -94,7 +94,7 @@ function logic.mixStyle(fish)
 	local parts = {"body","head","eyes","mouth","arms","legs","tail","cap"}
 	for i, part in ipairs(parts) do
 		local style = math.random(1,#assets.monster[part])
-		logic.changeStyle(fish,partname,style)
+		logic.changeStyle(fish,part,style)
 	end
 	
 end
@@ -120,13 +120,17 @@ function logic.chooseColorChange(fish,parts,color)
 	--remove parts which are alrady this color
 	local removals = 0
 	for i, part in ipairs(parts) do
-		if fish.parts[part].color == color then
+		if fish.parts[part].color[1] == color[1] and
+		fish.parts[part].color[2] == color[2] and
+		fish.parts[part].color[3] == color[3] then
 			removals = removals + 1
 		end
 	end
 	while removals > 0 do
 		for i, part in ipairs(parts) do
-			if fish.parts[part].color == color then
+		if fish.parts[part].color[1] == color[1] and
+		fish.parts[part].color[2] == color[2] and
+		fish.parts[part].color[3] == color[3] then
 				table.remove(parts,i)
 				removals = removals - 1
 				break
@@ -136,7 +140,7 @@ function logic.chooseColorChange(fish,parts,color)
 	
 	if #parts > 0 then
 		local choice = math.random(1,#parts)
-		logic.changeStyle(fish,parts[choice],style)
+		logic.changeColor(fish,parts[choice],color)
 	else
 		print("couldnt find a valid part for color change")
 	end
@@ -148,12 +152,11 @@ function logic.rainbowChange(fish)
 	local hue = math.random(0,255)
 	for i, part in ipairs(parts) do
 		local color = HSV(hue,255,255)
-		print(color[1],color[2],color[3])
 		logic.changeColor(fish,part,color)
 		hue = hue + 32
 		if hue > 255 then hue = hue - 255 end
 	end
-	
+	print("Rainbow creature!")
 end
 
 function logic.plainChange(fish)
@@ -239,6 +242,7 @@ end
 
 function logic.consumeBody(body,fish)
 	for layer, variant in ipairs(body.layers) do
+		print("layer: "..layer.."  variant: "..variant.variant)
 		local callback = assets.planet_layers[layer][variant.variant].callback or nil
 		if callback then
 			callback(fish)
@@ -263,25 +267,25 @@ end
 function logic.planet.mars(fish)
 	print("Mars planet eaten")
 	local hue = 295
-	logic.colorAll(fish,HSV(hue/360*255,255,255))
+	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.swamp(fish)
 	print("Swamp planet eaten")
 	local hue = 295
-	logic.colorAll(fish,HSV(hue/360*255,255,255))
+	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.purple(fish)
 	print("Purple planet eaten")
 	local hue = 295
-	logic.colorAll(fish,HSV(hue/360*255,255,255))
+	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.vulcano(fish)
 	print("Vulcano planet eaten")
 	local hue = 94
-	logic.colorAll(fish,HSV(hue/360*255,255,255))
+	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.broken(fish)
@@ -331,42 +335,25 @@ function logic.planet.electric(fish)
 end
 
 function logic.planet.clouds(fish)
+	print("Cloud planet eaten")
 	logic.chooseColorChange(fish,{},{255,255,255})
 end
 
-function logic.planet.butterly(fish)
+function logic.planet.butterfly(fish)
 	print("Butterfly planet eaten")
-	if fish.parts.mouth.style == 2 and not fish.parts.legs.style == 3 then
+	if fish.parts.mouth.style == 2 and not (fish.parts.legs.style == 3) then
 		logic.changeStyle(fish,"legs",3)
 		logic.setDetail(fish,"legs",false)
-	elseif not fish.parts.mouth.style == 2 then
+		print("Had a butterfly mouth without butterfly legs, so we got butterfly legs")
+	elseif not (fish.parts.mouth.style == 2) then
 		logic.changeStyle(fish,"mouth",2)
-		logic.setDetail(fish,"mouth",false)		
+		logic.setDetail(fish,"mouth",false)	
+		print("Got a butterfly mouth becasue we have something else for a mouth")
+	else
+		print("We must already have both butterfly peices")
 	end
 	
 end
 
 return logic
 
-
---[[
-
-P_Background_1_Earth - Changes random body part to CRAB
-P_Background_2_Barren - Hides color layer
-P_Background_3_Mars - Changes the color to and the outline to orange
-P_Background_4_Swamp - Changes the color to and the outline to green
-P_Background_5_Broken1 - Changes tail or tail cap to FLESH
-P_Background_5_Broken2 - Changes tail or tail cap to FLESH
-P_Background_6_Purple - Changes the color to and the outline to purple
-P_Detail_1_City - 
-P_Detail_2_Vulcano - Changes the outline color to yellow
-P_Detail_3_Corruption - Adds PURPLE detail to the random body part. If the is no body part that can be affected, change the color to purple
-P_Detail_4_Electric - Adds ELECTRIC to random body part. If the is no body part that can be affected, change the outline to light blue
-P_Top1_1_Clouds - Change outline color to white
-P_Top1_2_Clouds - 
-P_Top1_3_Rainbow - Color each body part with a random color
-P_Top2_1_Asteroids - Add a tail segment
-P_Top2_1_Corruption - Add a tail segment AND Adds PURPLE detail to the random body part. If the is no body part that can be affected, change the color to purple
-P_Top2_2_Butterflies - Chainges legs or mouth to BUTTERFLY
-P_Top2_2_Satelites -
-]]
