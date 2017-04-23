@@ -90,6 +90,7 @@ function newPartType(name1,name2,part)
 end
 
 newPartType("Body_1_Crab","Purple","body")
+newPartType("Body_2_Turtle","Purple","body")
 
 newPartType("Head_1_Crab","Purple","head")
 	
@@ -105,11 +106,14 @@ newPartType("Leg_1_Crab","Electric","legs")
 newPartType("Leg_2_Butterfly","Purple","legs")
 	
 newPartType("Cap_1_Crab","Purple","cap")
+newPartType("Cap_2_Flesh","Purple","cap")
 	
 newPartType("Tail_1_Crab","Purple","tail")
 newPartType("Tail_2_Flesh","Purple","tail")
 	
 newPartType("Eyes_1_Crab","Purple","eyes")
+newPartType("Eyes_2_Single","Purple","eyes")
+newPartType("Eyes_3_Wierd","Purple","eyes")
 
 part_offsets = {
 	body = {x=0,y=0},
