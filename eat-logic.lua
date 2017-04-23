@@ -18,17 +18,19 @@ end
 function logic.changeStyle(fish,part,style)
 	--if no sytle given then select style 1
 	fish.parts[part].style = style or 1
+	print(part.." changed to style "..(style or 1))
 end
 
 function logic.setDetail(fish,part,hasDetail)
 	--if no setting given then remove detail
 	fish.detail[part] = hasDetail or false
+	print(part.." detail changed to "..(tostring(style) or "false"))
 end
 
 function logic.setAllDetail(fish,hasDetail)
 	local parts = {"body","head","eyes","mouth","arms","legs","tail","cap"}
-	for i, part in ipairs(parts) do
-		logic.setDetail(fish,part,hasDetail)
+	for partname, part in ipairs(parts) do
+		logic.setDetail(fish,partname,hasDetail)
 	end
 end
 
@@ -92,7 +94,7 @@ function logic.mixStyle(fish)
 	local parts = {"body","head","eyes","mouth","arms","legs","tail","cap"}
 	for i, part in ipairs(parts) do
 		local style = math.random(1,#assets.monster[part])
-		logic.changeStyle(fish,part,style)
+		logic.changeStyle(fish,partname,style)
 	end
 	
 end
@@ -100,8 +102,16 @@ end
 function logic.changeColor(fish,part,color)
 	--if no color given then nil the color
 	fish.parts[part].color = color or nil
+	print(part.." changed color to "..(tostring(color) or "nil"))
 end
 
+function logic.colorAll(fish,color)
+	if color == nil then local color = nil end
+	print("Coloring all parts")
+	for partname, part in pairs(fish.parts) do
+		logic.changeColor(fish,partname,color)
+	end
+end
 
 function logic.chooseColorChange(fish,parts,color)
 	local parts = parts or {"body","head","eyes","mouth","arms","legs","tail","cap"}
@@ -171,11 +181,11 @@ function logic.addDetail(fish,detailType)
 		if fish.detail[part[1]] == true then
 			--set the part to be removed
 			part[2] = true
-			print(part[1].." is already detailed, deleting")
+			--print(part[1].." is already detailed, deleting")
 			removals = removals + 1
 		else
 			part[2] = false
-			print(part[1].." is can be detailed")
+			--print(part[1].." is can be detailed")
 		end
 	end
 	
@@ -188,7 +198,7 @@ function logic.addDetail(fish,detailType)
 			end
 		end
 	end
-	print("addDetail parts remain after stage 1: "..#parts)
+	--print("addDetail parts remain after stage 1: "..#parts)
 	
 	--of the remaining parts, find those which have a corruptable option
 	removals = 0
@@ -196,12 +206,12 @@ function logic.addDetail(fish,detailType)
 		local style = fish.parts[part[1]].style
 		if assets.monster[part[1]][style].detail == detailType then
 			--its corruptable, leave it
-			print(part[1].." can become "..detailType)
+			--print(part[1].." can become "..detailType)
 			part[2] = false
 		else
 			part[2] = true
 			removals = removals + 1
-			print(part[1].." cannot become "..detailType..", deleting")
+			--print(part[1].." cannot become "..detailType..", deleting")
 		end
 	end
 	
@@ -214,7 +224,7 @@ function logic.addDetail(fish,detailType)
 			end
 		end
 	end
-	print("addDetail parts remain after stage 2: "..#parts)
+	--print("addDetail parts remain after stage 2: "..#parts)
 	
 	if #parts > 0 then
 		local choice = math.random(1,#parts)
@@ -233,12 +243,108 @@ function logic.consumeBody(body,fish)
 		if callback then
 			callback(fish)
 			Fish.render(fish)
-			variant.eaten = true
+			--variant.eaten = true
 		end
 	end
 end
 
+logic.planet = {}
 
+function logic.planet.earth(fish)
+	print("Earth planet eaten")
+	logic.chooseStyleChange(fish,{},1)
+end
+
+function logic.planet.barren(fish)
+	print("Barren planet eaten")
+	logic.plainChange(fish)
+end
+
+function logic.planet.mars(fish)
+	print("Mars planet eaten")
+	local hue = 295
+	logic.colorAll(fish,HSV(hue/360*255,255,255))
+end
+
+function logic.planet.swamp(fish)
+	print("Swamp planet eaten")
+	local hue = 295
+	logic.colorAll(fish,HSV(hue/360*255,255,255))
+end
+
+function logic.planet.purple(fish)
+	print("Purple planet eaten")
+	local hue = 295
+	logic.colorAll(fish,HSV(hue/360*255,255,255))
+end
+
+function logic.planet.vulcano(fish)
+	print("Vulcano planet eaten")
+	local hue = 94
+	logic.colorAll(fish,HSV(hue/360*255,255,255))
+end
+
+function logic.planet.broken(fish)
+	print("Broken planet eaten")
+	logic.changeStyle(fish,"tail",2)
+	logic.changeStyle(fish,"cap",2)
+end
+
+function logic.planet.corruption(fish)
+	print("Corrupt planet eaten")
+	local result = logic.addDetail(fish,"Purple")
+	if result then
+		print("Corrupted "..result)
+	else
+		--nothing to corrupt so check if we can change some parts
+		if fish.parts.legs.style == 2 and fish.detail.legs == false then
+			logic.changeStyle(fish,"legs",1)
+			logic.setDetail(fish,"legs",true)
+		elseif fish.parts.arms.style == 2 and fish.detail.arms == false then
+			logic.changeStyle(fish,"arms",1)
+			logic.setDetail(fish,"arms",true)
+		end
+	end
+end
+
+function logic.planet.electric(fish)
+	print("Electric planet eaten")
+	local result = logic.addDetail(fish,"Electric")
+	if result then
+		print("Electrified "..result)
+	else
+		--nothing to corrupt so check if we can change some parts
+		if fish.parts.legs.style == 1 and fish.detail.legs == false then
+			logic.changeStyle(fish,"legs",2)
+			logic.setDetail(fish,"legs",true)
+			print("Swapped legs from NonCorrupt Crab to Electric Crab")
+		elseif fish.parts.arms.style == 1 and fish.detail.arms == false then
+			logic.changeStyle(fish,"arms",2)
+			logic.setDetail(fish,"arms",true)
+			print("Swapped mouth from NonCorrupt Crab to Electric Crab")
+		else
+			local hue = 213
+			local color = HSV(hue/360*255,255,255)
+			logic.chooseColorChange(fish,{},color)
+		end
+	end
+end
+
+function logic.planet.clouds(fish)
+	logic.chooseColorChange(fish,{},{255,255,255})
+end
+
+function logic.planet.butterly(fish)
+	print("Butterfly planet eaten")
+	if fish.parts.mouth.style == 2 and not fish.parts.legs.style == 3 then
+		logic.changeStyle(fish,"legs",3)
+		logic.setDetail(fish,"legs",false)
+	elseif not fish.parts.mouth.style == 2 then
+		logic.changeStyle(fish,"mouth",2)
+		logic.setDetail(fish,"mouth",false)		
+	end
+	
+end
 
 return logic
 

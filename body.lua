@@ -15,10 +15,11 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 			}
 	else
 		b.layers = {}
-		b.layers[1] = {variant = math.random(1,#assets.planet_layers[1]), eaten = false}
+		b.layers[1] = {variant = 1, eaten = false}
+		--b.layers[1] = {variant = math.random(1,#assets.planet_layers[1]), eaten = false}
 		b.layers[2] = {variant = math.random(0,#assets.planet_layers[2]), eaten = false}
-		b.layers[3] = {variant = math.random(0,#assets.planet_layers[3]), eaten = false}
-		b.layers[4] = {variant = math.random(0,#assets.planet_layers[4]), eaten = false}
+		--b.layers[3] = {variant = math.random(0,#assets.planet_layers[3]), eaten = false}
+		--b.layers[4] = {variant = math.random(0,#assets.planet_layers[4]), eaten = false}
 	end
 	return b
 end

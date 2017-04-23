@@ -33,13 +33,13 @@ FISH_MAX_SPEED = 300
 assets = {}
 assets.planet_layers = {}
 assets.planet_layers[1] = {
-	{image = lg.newImage("assets/P_Background_1_Earth.png")},
-	{image = lg.newImage("assets/P_Background_2_Barren.png")},
-	{image = lg.newImage("assets/P_Background_3_Mars.png")},
-	{image = lg.newImage("assets/P_Background_4_Swamp.png")},
-	{image = lg.newImage("assets/P_Background_5_Broken1.png")},
-	{image = lg.newImage("assets/P_Background_5_Broken2.png")},
-	{image = lg.newImage("assets/P_Background_6_Purple.png")}
+	{image = lg.newImage("assets/P_Background_1_Earth.png"), callback = function(fish) Logic.planet.earth(fish) end},
+	{image = lg.newImage("assets/P_Background_2_Barren.png"), callback = function(fish) Logic.planet.barren(fish) end},
+	{image = lg.newImage("assets/P_Background_3_Mars.png"), callback = function(fish) Logic.planet.mars(fish) end},
+	{image = lg.newImage("assets/P_Background_4_Swamp.png"), callback = function(fish) Logic.planet.swamp(fish) end},
+	{image = lg.newImage("assets/P_Background_5_Broken1.png"), callback = function(fish) Logic.planet.broken(fish) end},
+	{image = lg.newImage("assets/P_Background_5_Broken2.png"), callback = function(fish) Logic.planet.broken(fish) end},
+	{image = lg.newImage("assets/P_Background_6_Purple.png"), callback = function(fish) Logic.planet.purple(fish) end}
 	}
 
 assets.planet_layers[2] = {

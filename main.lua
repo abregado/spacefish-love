@@ -15,5 +15,4 @@ function love.update(dt)
 end
 
 function love.mousepressed(x,y,button)
-	print("mouseclicked "..button)
 end
