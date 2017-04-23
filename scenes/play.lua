@@ -75,6 +75,7 @@ function play:keypressed(key)
 			play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
 			if play.locked_to then
 				play.orbitlock = true
+				Logic.consumeBody(play.locked_to,play.fish)
 			end
 		end
 	elseif key == "1" then

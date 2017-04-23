@@ -10,13 +10,15 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 	b.color = color or {255,255,255}
 	b.isPlanet = isPlanet or false
 	if b.size < 1 then
-		b.layers = {2}
+		b.layers = {
+			{variant = 2, eaten = false}
+			}
 	else
 		b.layers = {}
-		b.layers[1] = math.random(1,#assets.planet_layers[1])
-		b.layers[2] = math.random(0,#assets.planet_layers[2])
-		b.layers[3] = math.random(0,#assets.planet_layers[3])
-		b.layers[4] = math.random(0,#assets.planet_layers[4])
+		b.layers[1] = {variant = math.random(1,#assets.planet_layers[1]), eaten = false}
+		b.layers[2] = {variant = math.random(0,#assets.planet_layers[2]), eaten = false}
+		b.layers[3] = {variant = math.random(0,#assets.planet_layers[3]), eaten = false}
+		b.layers[4] = {variant = math.random(0,#assets.planet_layers[4]), eaten = false}
 	end
 	return b
 end
@@ -45,8 +47,8 @@ function body.draw(self,timepoint)
 		
 		lg.setColor(255,255,255)
 		for i, layer in ipairs(self.layers) do
-			if layer > 0 then
-				local image = assets.planet_layers[i][layer]
+			if layer.variant > 0 and layer.eaten == false then
+				local image = assets.planet_layers[i][layer.variant].image
 				lg.draw(image,pos.x,pos.y,1,ratio,ratio,image:getWidth()/2,image:getHeight()/2)
 			end
 		end

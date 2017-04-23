@@ -228,8 +228,17 @@ function logic.addDetail(fish,detailType)
 end
 
 function logic.consumeBody(body,fish)
-	
+	for layer, variant in ipairs(body.layers) do
+		local callback = assets.planet_layers[layer][variant.variant].callback or nil
+		if callback then
+			callback(fish)
+			Fish.render(fish)
+			variant.eaten = true
+		end
+	end
 end
+
+
 
 return logic
 

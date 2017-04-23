@@ -33,34 +33,34 @@ FISH_MAX_SPEED = 300
 assets = {}
 assets.planet_layers = {}
 assets.planet_layers[1] = {
-	lg.newImage("assets/P_Background_1_Earth.png"),
-	lg.newImage("assets/P_Background_2_Barren.png"),
-	lg.newImage("assets/P_Background_3_Mars.png"),
-	lg.newImage("assets/P_Background_4_Swamp.png"),
-	lg.newImage("assets/P_Background_5_Broken1.png"),
-	lg.newImage("assets/P_Background_5_Broken2.png"),
-	lg.newImage("assets/P_Background_6_Purple.png")
+	{image = lg.newImage("assets/P_Background_1_Earth.png")},
+	{image = lg.newImage("assets/P_Background_2_Barren.png")},
+	{image = lg.newImage("assets/P_Background_3_Mars.png")},
+	{image = lg.newImage("assets/P_Background_4_Swamp.png")},
+	{image = lg.newImage("assets/P_Background_5_Broken1.png")},
+	{image = lg.newImage("assets/P_Background_5_Broken2.png")},
+	{image = lg.newImage("assets/P_Background_6_Purple.png")}
 	}
 
 assets.planet_layers[2] = {
-	lg.newImage("assets/P_Detail_1_City.png"),
-	lg.newImage("assets/P_Detail_2_Vulcano.png"),
-	lg.newImage("assets/P_Detail_1_Corruption.png"),
-	lg.newImage("assets/P_Detail_3_Corruption.png"),
-	lg.newImage("assets/P_Detail_4_Electric.png")
+	{image = lg.newImage("assets/P_Detail_1_City.png")},
+	{image = lg.newImage("assets/P_Detail_2_Vulcano.png")},
+	{image = lg.newImage("assets/P_Detail_1_Corruption.png")},
+	{image = lg.newImage("assets/P_Detail_3_Corruption.png")},
+	{image = lg.newImage("assets/P_Detail_4_Electric.png")}
 	}
 
 assets.planet_layers[3] = {
-	lg.newImage("assets/P_Top1_1_Clouds.png"),
-	lg.newImage("assets/P_Top1_2_Clouds.png"),
-	lg.newImage("assets/P_Top1_3_Rainbow.png")
+	{image = lg.newImage("assets/P_Top1_1_Clouds.png")},
+	{image = lg.newImage("assets/P_Top1_2_Clouds.png")},
+	{image = lg.newImage("assets/P_Top1_3_Rainbow.png"), callback = function(fish) Logic.rainbowChange(fish) end}
 	}
 
 assets.planet_layers[4] = {
-	lg.newImage("assets/P_Top2_1_Asteroids.png"),
-	lg.newImage("assets/P_Top2_1_Corruption.png"),
-	lg.newImage("assets/P_Top2_2_Satelites.png"),
-	lg.newImage("assets/P_Top2_2_Butterflies.png")
+	{image = lg.newImage("assets/P_Top2_1_Asteroids.png")},
+	{image = lg.newImage("assets/P_Top2_1_Corruption.png")},
+	{image = lg.newImage("assets/P_Top2_2_Satelites.png")},
+	{image = lg.newImage("assets/P_Top2_2_Butterflies.png")}
 	}
 
 
