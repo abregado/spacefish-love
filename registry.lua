@@ -24,17 +24,24 @@ GLOBAL_CENTREPOINT_Y = lg.getHeight()/2
 ZOOM_LEVELS = {0.25,0.5,1,2}
 CAMERA_SMOOTHER = Camera.smooth.damped(1)
 
+
 --assets
 assets = {}
 assets.planet_layers = {}
 assets.planet_layers[1] = {
 	lg.newImage("assets/P_Background_1_Earth.png"),
-	lg.newImage("assets/P_Background_2_Barren.png")
+	lg.newImage("assets/P_Background_2_Barren.png"),
+	lg.newImage("assets/P_Background_3_Mars.png"),
+	lg.newImage("assets/P_Background_4_Swamp.png"),
+	lg.newImage("assets/P_Background_5_Broken1.png"),
+	lg.newImage("assets/P_Background_5_Broken2.png"),
+	lg.newImage("assets/P_Background_6_Purple.png")
 	}
 
 assets.planet_layers[2] = {
 	lg.newImage("assets/P_Detail_1_City.png"),
-	lg.newImage("assets/P_Detail_2_Vulcano.png")
+	lg.newImage("assets/P_Detail_2_Vulcano.png"),
+	lg.newImage("assets/P_Detail_1_Corruption.png")
 	}
 
 assets.planet_layers[3] = {
@@ -44,8 +51,10 @@ assets.planet_layers[3] = {
 
 assets.planet_layers[4] = {
 	lg.newImage("assets/P_Top2_1_Asteroids.png"),
+	lg.newImage("assets/P_Top2_1_Corruption.png"),
 	lg.newImage("assets/P_Top2_2_Satelites.png")
 	}
+
 
 
 assets.monster = {}
