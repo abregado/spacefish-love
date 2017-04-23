@@ -76,7 +76,13 @@ function play:keypressed(key)
 	elseif key == "3" then
 		Logic.mixStyle(play.fish)
 	elseif key == "4" then
-		Logic.chooseStyleChange(play.fish)
+		Logic.chooseStyleChange(play.fish,{},1)
+	elseif key == "5" then
+		Logic.setAllDetail(play.fish,false)
+	elseif key == "6" then
+		Logic.rainbowChange(play.fish)
+	elseif key == "7" then
+		Logic.plainChange(play.fish)
 	end
 	
 	

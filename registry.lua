@@ -98,7 +98,6 @@ newPartType("Head_1_Crab","Purple","head")
 newPartType("Arm_1_Crab","Purple","arms")
 newPartType("Arm_1_Crab","Electric","arms")
 	
-newPartType("Mouth_1_Crab","Purple","mouth")
 newPartType("Mouth_1_Crab","Electric","mouth")
 newPartType("Mouth_2_Butterfly","Electric","mouth")
 	

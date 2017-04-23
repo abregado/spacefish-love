@@ -12,7 +12,7 @@ function HSV(h, s, v)
     elseif h < 4 then r,g,b = 0,x,c
     elseif h < 5 then r,g,b = x,0,c
     else              r,g,b = c,0,x
-    end return (r+m)*255,(g+m)*255,(b+m)*255
+    end return {(r+m)*255,(g+m)*255,(b+m)*255}
 end
 
 function logic.changeStyle(fish,part,style)
@@ -25,6 +25,12 @@ function logic.setDetail(fish,part,hasDetail)
 	fish.detail[part] = hasDetail or false
 end
 
+function logic.setAllDetail(fish,hasDetail)
+	local parts = {"body","head","eyes","mouth","arms","legs","tail","cap"}
+	for i, part in ipairs(parts) do
+		logic.setDetail(fish,part,hasDetail)
+	end
+end
 
 function logic.chooseStyleChange(fish,parts,style)
 	local parts = parts or {"body","head","eyes","mouth","arms","legs","tail","cap"}
@@ -132,8 +138,19 @@ function logic.rainbowChange(fish)
 	local hue = math.random(0,255)
 	for i, part in ipairs(parts) do
 		local color = HSV(hue,255,255)
+		print(color[1],color[2],color[3])
 		logic.changeColor(fish,part,color)
 		hue = hue + 32
+		if hue > 255 then hue = hue - 255 end
+	end
+	
+end
+
+function logic.plainChange(fish)
+	local parts = {"body","head","eyes","mouth","arms","legs","tail","cap"}
+	
+	for i, part in ipairs(parts) do
+		logic.changeColor(fish,part,nil)
 	end
 	
 end
