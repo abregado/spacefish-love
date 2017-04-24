@@ -69,7 +69,15 @@ function body.findNearest(bodies,pos,timepoint)
 			end
 		end
 	end
-	return nearest.body, {x=pos.x - nearest.pos.x, y=pos.y- nearest.pos.y}
+	return nearest.body, {x=pos.x - nearest.pos.x, y=pos.y- nearest.pos.y}, nearest.dist
+end
+
+function body.clickCheck(bodies,mx,my,timepoint)
+	local nearbody, vector, distance = body.findNearest(bodies,{x=mx,y=my},timepoint)
+	if nearbody and distance < nearbody.size*10 then
+		return nearbody
+	end
+	return nil	
 end
 
 return body

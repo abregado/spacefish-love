@@ -66,7 +66,11 @@ end
 
 function play:keypressed(key)
 	if key == "space" then
-		if play.orbitlock then
+		local closebody, rel_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
+		if closebody then
+			Fish.lockToBody(play.fish,closebody)
+		end
+		--[[if play.orbitlock then
 			play.orbitlock = false
 			play.locked_to = nil
 			play.locked_pos = nil
@@ -77,7 +81,7 @@ function play:keypressed(key)
 				play.orbitlock = true
 				Logic.consumeBody(play.locked_to,play.fish)
 			end
-		end
+		end]]
 	elseif key == "1" then
 		Logic.addDetail(play.fish,"Purple")
 		Fish.render(play.fish)
@@ -109,23 +113,35 @@ function play:keypressed(key)
 
 end
 
+local pulsepower = 0
+
 function play:mousepressed(x,y,button)
-	if button == 1 then
+	--[[if button == 1 then
 		local mx,my = play.camera:mousePosition()
 		--play.fish:teleport({x=mx,y=my})
 		local fvec = Vector(play.fish.pos.x,play.fish.pos.y)
-		local mvec = Vector(mx,my)
+		local mvec = play.fish.lookingVector
+		--local mvec = Vector(mx,my)
 		local direc =  mvec - fvec
+		
 		direc = direc:trimmed(0.5)
 		play.fish.vector = play.fish.vector + direc
-	elseif button == 2 then
-		play.fish.vector = play.fish.vector /2
+	]]
+	if button == 2 then
+		--Fish.slowDown(play.fish)
 	elseif button == 3 then
 		play.zoom = play.zoom + 1
 		if play.zoom > #ZOOM_LEVELS then play.zoom = 1 end
 		play.camera:zoomTo(ZOOM_LEVELS[play.zoom])
 	end
 	
+end
+
+function play:mousereleased(x,y,button)
+	if button == 1 then
+		Fish.updateVelocity(play.fish,pulsepower)
+		pulsepower = 0
+	end
 end
 
 
@@ -178,18 +194,30 @@ function play:draw()
 		lg.setColor(0,255,0)
 		lg.print("movement free",0,45)
 	end
+	lg.print("Pulse: "..pulsepower,0,60)
+	lg.print("Angle: "..ANGLE,0,75)
 end
 
 function play:update(dt)
 	timepoint = timepoint + dt
+	if love.mouse.isDown(1) then
+		pulsepower = pulsepower + dt
+		if pulsepower > MAX_PULSE then pulsepower = MAX_PULSE end
+	end
+	if love.mouse.isDown(2) then
+		Fish.slowDown(play.fish,dt)
+	end
 	
-	local mx,my = play.camera:mousePosition()
+	Fish.update(play.fish,play.camera,dt)
+	local x,y = play.fish.pos:unpack()
+	play.camera:lockPosition(x,y, CAMERA_SMOOTHER)
+	
+	--[[local mx,my = play.camera:mousePosition()
 	
 	local fpos = Vector(play.fish.pos.x,play.fish.pos.y)
 	local npos = fpos + play.fish.vector
 	local x,y = npos:unpack()
 	
-	play.camera:lockPosition(play.fish.pos.x,play.fish.pos.y, CAMERA_SMOOTHER)
 	
 	if play.orbitlock and play.locked_to then
 		local lock_point = Body.pos(play.locked_to,timepoint)
@@ -202,7 +230,7 @@ function play:update(dt)
 	else
 		play.fish.pos = {x=x,y=y}
 	end
-	
+	]]
 	
 end
 

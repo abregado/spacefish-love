@@ -3,7 +3,7 @@ local fish = {}
 function fish.new()
 	local f = {}
 	--properties
-	f.pos = {x=0,y=0}
+	f.pos = Vector(-100,-100)
 	f.parts = {
 		body = {style=1,color={255,255,255},outline=nil},
 		head = {style=1,color={255,255,255},outline=nil},
@@ -28,6 +28,13 @@ function fish.new()
 	f.color = {255,255,255}
 	f.scale = 0.15
 	f.vector = Vector(0,0)
+	f.lookingVector = Vector(1,0)
+	f.wantedVector = Vector(0,1)
+	f.locked = {
+		body = nil,
+		dx = 0,
+		dy = 0
+		}
 	--methods
 	f.move = fish.move
 	f.teleport = fish.teleport
@@ -154,18 +161,83 @@ function fish.render(self)
 end
 
 function fish.draw(self)
-	local pos = Vector(self.pos.x,self.pos.y)
-	local norm = pos - self.vector
-	local rot = self.vector:angleTo(Vector(0,0))
-	local step = pos + self.vector*30
+	--[[local pos = Vector(self.pos.x,self.pos.y)
+	local norm = pos - self.vector]]
+	
+	local x,y = self.pos:unpack()
+	local rot = self.lookingVector:angleTo(Vector(0,0))
+	local step = self.pos + self.vector*30
 	local nx,ny = step:unpack()
 	
-
 	
 	lg.setColor(255,255,255)
-	lg.draw(self.canvas,self.pos.x,self.pos.y,rot,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
+	lg.draw(self.canvas,x,y,rot,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
 	--lg.setColor(255,0,0)
 	--lg.line(self.pos.x,self.pos.y,nx,ny)
+end
+
+function fish.update(fish,camera,dt)
+	local mx,my = camera:mousePosition()
+	--local fpos = Vector(fish.pos.x,fish.pos.y)
+	fish.wantedVector = Vector(mx-fish.pos.x,my-fish.pos.y):normalized()	
+
+	--CANT GET THIS MESS WORKING
+	--[[local ROTSPEED = 30
+	local angle = fish.wantedVector:angleTo(fish.lookingVector)
+	local l_angle = Vector(0,0):angleTo(fish.lookingVector)
+	local w_angle = Vector(0,0):angleTo(fish.wantedVector)
+	local clockwise = l_angle - w_angle
+	local anticlockwise = w_angle - l_angle
+	if math.abs(clockwise) < math.abs(anticlockwise) then 
+		angle = clockwise
+	else
+		angle = anticlockwise
+	end
+	--fish.lookingVector = fish.lookingVector + (fish.wantedVector/100*ROTSPEED)
+	--fish.lookingVector:normalized()]]
+	
+	fish.lookingVector = fish.wantedVector
+	if fish.locked.body then
+		local bpos = Body.pos(fish.locked.body,timepoint)
+		fish.lookingVector = Vector(bpos.x,bpos.y) - fish.pos
+		fish.pos = Vector(bpos.x+fish.locked.dx,bpos.y+fish.locked.dy)
+	else
+		fish.pos = fish.pos + fish.vector
+	end
+end
+
+function fish.updateVelocity(fish,power)
+	print("added more speed")
+	local deadzone = 1
+	if power < deadzone then
+		--do nothing
+	else	
+		fish.vector = fish.vector + (fish.lookingVector*power/100*FISH_SWIM_IMPULSE)
+		fish.vector = fish.vector:trimmed(10)
+	end
+end
+
+function fish.lockToBody(fish,body)
+	if fish.locked.body then
+		print("unlocked from body")
+		fish.vector:trimInplace(0)
+		fish.locked.body = nil
+	else
+		print("locked to body")
+		fish.locked.body = body
+		local x,y = fish.pos:unpack()
+		local bpos = Body.pos(body,timepoint)
+		local dx,dy = x - bpos.x, y - bpos.y
+		fish.locked.dx, fish.locked.dy = dx,dy
+	end
+end
+
+function fish.slowDown(fish,dt)
+	print("Slowing Down")
+	brake_constant = 80
+	local percentslowed = 100 - (brake_constant * dt)
+	
+	fish.vector = fish.vector * percentslowed / 100
 end
 
 return fish
