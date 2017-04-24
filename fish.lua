@@ -229,13 +229,13 @@ end
 
 function fish.updateVelocity(fish,power)
 	
-	local deadzone = 0.5
-	if power < deadzone or fish.locked.body then
+
+	if power < PULSE_DEADZONE or fish.locked.body then
 		--do nothing
 		print("added no speed")
 	else	
 		fish.vector = fish.vector + (fish.lookingVector*power/100*FISH_SWIM_IMPULSE)
-		fish.vector = fish.vector:trimmed(10)
+		fish.vector = fish.vector:trimmed(FISH_MAX_SPEED)
 		print("added more speed")
 	end
 end
@@ -272,8 +272,7 @@ end
 
 function fish.slowDown(fish,dt)
 	--print("Slowing Down")
-	brake_constant = 80
-	local percentslowed = 100 - (brake_constant * dt)
+	local percentslowed = 100 - (BRAKE_CONSTANT * dt)
 	
 	fish.vector = fish.vector * percentslowed / 100
 end
