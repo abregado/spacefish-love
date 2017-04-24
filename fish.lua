@@ -207,21 +207,27 @@ function fish.update(fish,camera,dt)
 end
 
 function fish.updateVelocity(fish,power)
-	print("added more speed")
-	local deadzone = 1
-	if power < deadzone then
+	
+	local deadzone = 0.5
+	if power < deadzone or fish.locked.body then
 		--do nothing
+		print("added no speed")
 	else	
 		fish.vector = fish.vector + (fish.lookingVector*power/100*FISH_SWIM_IMPULSE)
 		fish.vector = fish.vector:trimmed(10)
+		print("added more speed")
 	end
 end
 
 function fish.lockToBody(fish,body)
 	if fish.locked.body then
-		print("unlocked from body")
-		fish.vector:trimInplace(0)
-		fish.locked.body = nil
+		if fish.locked.body == body then
+			Logic.consumeBody(body,fish)
+		end
+		--[[print("unlocked from body")
+		fish.vector = Vector(0,0)
+		fish.locked.body = nil]]
+		return true
 	else
 		print("locked to body")
 		fish.locked.body = body
@@ -229,11 +235,22 @@ function fish.lockToBody(fish,body)
 		local bpos = Body.pos(body,timepoint)
 		local dx,dy = x - bpos.x, y - bpos.y
 		fish.locked.dx, fish.locked.dy = dx,dy
+		fish.vector = Vector(0,0)
+		return true
+	end
+end
+
+function fish.detach(fish)
+	if fish.locked.body then
+		print("unlocked from body")
+		fish.vector = Vector(0,0)
+		fish.locked.body = nil
+		return false
 	end
 end
 
 function fish.slowDown(fish,dt)
-	print("Slowing Down")
+	--print("Slowing Down")
 	brake_constant = 80
 	local percentslowed = 100 - (brake_constant * dt)
 	

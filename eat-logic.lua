@@ -250,6 +250,7 @@ function logic.consumeBody(body,fish)
 			--variant.eaten = true
 		end
 	end
+	Body.damage(body)
 end
 
 logic.planet = {}

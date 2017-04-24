@@ -65,24 +65,8 @@ function play:enter()
 end
 
 function play:keypressed(key)
-	if key == "space" then
-		local closebody, rel_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
-		if closebody then
-			Fish.lockToBody(play.fish,closebody)
-		end
-		--[[if play.orbitlock then
-			play.orbitlock = false
-			play.locked_to = nil
-			play.locked_pos = nil
-			play.fish.vector = play.fish.vector:trimmed(1)
-		else
-			play.locked_to, play.locked_pos = Body.findNearest(play.planets,play.fish.pos,timepoint)
-			if play.locked_to then
-				play.orbitlock = true
-				Logic.consumeBody(play.locked_to,play.fish)
-			end
-		end]]
-	elseif key == "1" then
+
+	if key == "1" then
 		Logic.addDetail(play.fish,"Purple")
 		Fish.render(play.fish)
 	elseif key == "2" then
@@ -107,13 +91,10 @@ function play:keypressed(key)
 		Fish.randomize(play.fish)
 		Fish.render(play.fish)
 	end
-	
-	
-	
-
 end
 
 local pulsepower = 0
+local isLocked = false
 
 function play:mousepressed(x,y,button)
 	--[[if button == 1 then
@@ -127,7 +108,25 @@ function play:mousepressed(x,y,button)
 		direc = direc:trimmed(0.5)
 		play.fish.vector = play.fish.vector + direc
 	]]
-	if button == 2 then
+	if button == 1 then
+		local mx,my = play.camera:mousePosition()
+		local clicked, distance = Body.clickCheck(play.planets,mx,my,timepoint)
+		
+		if clicked then
+			local x,y = play.fish.pos:unpack()
+			local bpos = Body.pos(clicked,timepoint)
+			local distanceToFish = VectorL.dist(x,y,bpos.x,bpos.y)
+			if distanceToFish < FISH_REACH+(clicked.size*10) then
+				isLocked = Fish.lockToBody(play.fish,clicked)
+			end
+		end
+		pulsepower = 0
+	elseif button == 2 then
+		if isLocked then
+			Fish.detach(play.fish)
+			isLocked = false
+		end
+		--Fish.lockToBody(play.fish,nil)
 		--Fish.slowDown(play.fish)
 	elseif button == 3 then
 		play.zoom = play.zoom + 1
@@ -204,7 +203,7 @@ function play:update(dt)
 		pulsepower = pulsepower + dt
 		if pulsepower > MAX_PULSE then pulsepower = MAX_PULSE end
 	end
-	if love.mouse.isDown(2) then
+	if love.mouse.isDown(2) and isLocked == false then
 		Fish.slowDown(play.fish,dt)
 	end
 	

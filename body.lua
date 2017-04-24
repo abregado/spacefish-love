@@ -23,6 +23,10 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 	return b
 end
 
+function body.damage(self)
+	self.isPlanet = false
+end
+
 function body.pos(self,timepoint)
 	if self.parent then
 		local centerpos = body.pos(self.parent,timepoint)
@@ -57,7 +61,7 @@ function body.draw(self,timepoint)
 end
 
 function body.findNearest(bodies,pos,timepoint)
-	local nearest = {body=nil,pos={x=0,y=0},dist=300}
+	local nearest = {body=nil,pos={x=0,y=0},dist=200}
 	for i, planet in ipairs(bodies) do
 		if planet.isPlanet then
 			local p_pos = body.pos(planet,timepoint)
@@ -75,7 +79,7 @@ end
 function body.clickCheck(bodies,mx,my,timepoint)
 	local nearbody, vector, distance = body.findNearest(bodies,{x=mx,y=my},timepoint)
 	if nearbody and distance < nearbody.size*10 then
-		return nearbody
+		return nearbody, distance
 	end
 	return nil	
 end
