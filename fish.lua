@@ -25,6 +25,8 @@ function fish.new()
 		cap = false		
 		}
 	f.canvas = lg.newCanvas(2048*2,2048*2)
+	f.nextcanvas = nil
+	f.fade = 0
 	f.color = {255,255,255}
 	f.scale = 0.15
 	f.vector = Vector(0,0)
@@ -90,7 +92,7 @@ function fish.drawPartInPlace(self,part,flip)
 		poff = {x= part_offsets[part].x + fixedoff , y= part_offsets[part].y * -1  + fixedoff}	
 	end
 	
-	local vflip = 1 
+	local vflip = 1
 	local hflip = 1 
 	if flip then vflip = -1  end
 	
@@ -134,8 +136,8 @@ function fish.drawPartInPlace(self,part,flip)
 end
 
 function fish.render(self)
-	lg.setCanvas(self.canvas)
-	lg.clear()
+	self.nextcanvas = lg.newCanvas(2048*2,2048*2)
+	lg.setCanvas(self.nextcanvas)
 
 	--draw tailsegments
 	fish.drawPartInPlace(self,"tail")
@@ -157,6 +159,7 @@ function fish.render(self)
 	fish.drawPartInPlace(self,"eyes")
 
 	lg.setCanvas()
+	self.fade = 0
 	
 end
 
@@ -170,14 +173,32 @@ function fish.draw(self)
 	local nx,ny = step:unpack()
 	
 	
-	lg.setColor(255,255,255)
+	lg.setColor(255,255,255,300-self.fade)
 	lg.draw(self.canvas,x,y,rot,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
+	if self.nextcanvas then
+		lg.setColor(255,255,255,self.fade)
+		lg.draw(self.nextcanvas,x,y,rot,self.scale,self.scale,self.canvas:getWidth()/2,self.canvas:getHeight()/2)
+	end
 	--lg.setColor(255,0,0)
 	--lg.line(self.pos.x,self.pos.y,nx,ny)
 end
 
 function fish.update(fish,camera,dt)
 	local mx,my = camera:mousePosition()
+	local FADE_CONST = 100
+	if fish.nextcanvas then
+		if fish.fade < 255 then
+			--fade in more
+			fish.fade = fish.fade + (FADE_CONST*dt)
+			fish.fade = fish.fade + (FADE_CONST*dt)
+		else
+			--swap canvas
+			fish.canvas = fish.nextcanvas
+			fish.nextcanvas = nil
+			fish.fade = 0
+		end
+	end
+	
 	--local fpos = Vector(fish.pos.x,fish.pos.y)
 	fish.wantedVector = Vector(mx-fish.pos.x,my-fish.pos.y):normalized()	
 
