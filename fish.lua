@@ -230,14 +230,14 @@ end
 function fish.updateVelocity(fish,power)
 	
 
-	if power < PULSE_DEADZONE or fish.locked.body then
+	--[[if power < PULSE_DEADZONE or fish.locked.body then
 		--do nothing
 		print("added no speed")
-	else	
+	else]]	
 		fish.vector = fish.vector + (fish.lookingVector*power/100*FISH_SWIM_IMPULSE)
 		fish.vector = fish.vector:trimmed(FISH_MAX_SPEED)
-		print("added more speed")
-	end
+		--print("added more speed")
+	--end
 end
 
 function fish.lockToBody(fish,body)

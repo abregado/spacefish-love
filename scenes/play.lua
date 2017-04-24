@@ -2,7 +2,7 @@ play = {}
 
 play.planets = {}
 play.fish = nil
-play.zoom = 1
+play.zoom = 17
 play.orbitlock = false
 play.locked_to = nil
 play.locked_pos = {x=20,y=20}
@@ -178,7 +178,7 @@ function play:draw()
 	
 	local w,h = assets.background:getWidth(), assets.background:getHeight()
 	local ww,wh = lg:getWidth(), lg:getHeight()
-	lg.draw(assets.background,ww/2-w,wh/2-h,0,2,2)
+	lg.draw(assets.background,ww/2-w*2,wh/2-h*2,0,4,4)
 
 	--Draw game world
 	play.camera:attach()
@@ -258,7 +258,15 @@ function play:update(dt)
 		if pulsepower > MAX_PULSE then pulsepower = MAX_PULSE end
 	end
 	if love.mouse.isDown(2) and isLocked == false then
-		Fish.slowDown(play.fish,dt)
+		Fish.slowDown(play.fish,dt)		
+	end
+	
+	if love.keyboard.isDown("s") and isLocked == false then
+		Fish.slowDown(play.fish,dt)		
+	end
+	
+	if love.keyboard.isDown("w") and isLocked == false then
+		Fish.updateVelocity(play.fish,dt*2)	
 	end
 	
 	Fish.update(play.fish,play.camera,dt)

@@ -1,6 +1,9 @@
 require("registry")
 
 function love.load()
+	--local modes = love.window.getFullscreenModes()
+	--love.window.setMode(modes[1].width,modes[1].height)
+	--love.window.setFullscreen(true)
 	Gamestate.registerEvents()
     Gamestate.switch(scenes.play)
 end
