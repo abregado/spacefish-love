@@ -253,6 +253,7 @@ function logic.consumeBody(body,fish)
 		end
 	end
 	Body.damage(body)
+	fish.scale = fish.scale * FISH_GROWTH_PER_PLANET
 end
 
 logic.planet = {}
@@ -264,30 +265,30 @@ end
 
 function logic.planet.barren(fish)
 	print("Barren planet eaten")
-	logic.plainChange(fish)
+	--logic.plainChange(fish)
 end
 
 function logic.planet.mars(fish)
 	print("Mars planet eaten")
-	local hue = 295
+	local hue = 20
 	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.swamp(fish)
 	print("Swamp planet eaten")
-	local hue = 295
+	local hue = 80
 	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.purple(fish)
 	print("Purple planet eaten")
-	local hue = 295
+	local hue = 190
 	logic.colorAll(fish,HSV(hue,255,255))
 end
 
 function logic.planet.vulcano(fish)
 	print("Vulcano planet eaten")
-	local hue = 94
+	local hue = 50
 	logic.colorAll(fish,HSV(hue,255,255))
 end
 
@@ -330,12 +331,13 @@ function logic.planet.electric(fish)
 			logic.setDetail(fish,"arms",true)
 			print("Swapped mouth from NonCorrupt Crab to Electric Crab")
 		else
-			local hue = 213
+			local hue = 130
 			local color = HSV(hue/360*255,255,255)
 			logic.chooseColorChange(fish,{},color)
 		end
 	end
 end
+
 
 function logic.planet.clouds(fish)
 	print("Cloud planet eaten")
@@ -344,8 +346,8 @@ end
 
 function logic.planet.butterfly(fish)
 	print("Butterfly planet eaten")
-	if fish.parts.mouth.style == 2 and not (fish.parts.legs.style == 3) then
-		logic.changeStyle(fish,"legs",3)
+	if fish.parts.mouth.style == 2 and not (fish.parts.legs.style == 4) then
+		logic.changeStyle(fish,"legs",4)
 		logic.setDetail(fish,"legs",false)
 		print("Had a butterfly mouth without butterfly legs, so we got butterfly legs")
 	elseif not (fish.parts.mouth.style == 2) then
@@ -356,6 +358,37 @@ function logic.planet.butterfly(fish)
 		print("We must already have both butterfly peices")
 	end
 	
+end
+
+
+function logic.planet.eye(fish)
+	--give big eye
+	logic.changeStyle(fish,"eyes",2)
+end
+
+function logic.planet.shield(fish)
+	--remove all details
+	logic.setAllDetail(fish,false)
+end
+
+function logic.planet.forge(fish)
+	--give skull
+	logic.changeStyle(fish,"head",2)
+end
+
+function logic.planet.metal(fish)
+	--give turtle shell
+	logic.changeStyle(fish,"body",2)
+end
+
+function logic.planet.express(fish)
+	--give one set of tentcles
+	logic.chooseStyleChange(fish,{"legs","mouth","arms"},3)
+end
+
+function logic.planet.smog(fish)
+	--give weird eyes
+	logic.changeStyle(fish,"eyes",3)
 end
 
 return logic

@@ -5,14 +5,14 @@ function fish.new()
 	--properties
 	f.pos = Vector(-100,-100)
 	f.parts = {
-		body = {style=1,color={255,255,255},outline=nil},
-		head = {style=1,color={255,255,255},outline=nil},
-		eyes = {style=1,color={255,255,255},outline=nil},
-		mouth = {style=2,color={255,255,255},outline=nil},
-		arms = {style=1,color={255,255,255},outline=nil},
-		legs = {style=2,color={255,255,255},outline=nil},
-		tail = {style=1,color={255,255,255},outline=nil},
-		cap = {style=1,color={255,255,255},outline=nil}		
+		body = {style=1,color=nil,outline=nil},
+		head = {style=1,color=nil,outline=nil},
+		eyes = {style=1,color=nil,outline=nil},
+		mouth = {style=1,color=nil,outline=nil},
+		arms = {style=1,color=nil,outline=nil},
+		legs = {style=1,color=nil,outline=nil},
+		tail = {style=1,color=nil,outline=nil},
+		cap = {style=1,color=nil,outline=nil}		
 		}
 	f.detail = {
 		body = false,

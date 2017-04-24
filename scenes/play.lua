@@ -23,7 +23,7 @@ function play:enter()
 	local distance = 500
 	local maxplanets = 1
 	for p = 0, 10 do
-		distance = distance + math.random(500,3000)
+		distance = distance + math.random(500,2000)
 		local planetshere = math.floor(math.random(math.floor(maxplanets/2),maxplanets))
 		local startoff = math.pi*2*math.random()
 		local step = math.pi*2/(planetshere+5)
@@ -43,7 +43,7 @@ function play:enter()
 		if maxplanets > 3 then maxplanets = 3 end
 	end
 	
-	local moons = {}
+	--[[local moons = {}
 	for i, planet in ipairs(planets) do
 		if i > 1 then
 			local distance = 3+(planet.size*10)
@@ -63,7 +63,7 @@ function play:enter()
 	
 	for i, moon in ipairs(moons) do
 		table.insert(planets, moon)
-	end
+	end]]
 	
 	print("Finished Building World")
 	
@@ -72,7 +72,7 @@ function play:enter()
 	play.camera = Camera(play.fish.pos.x,play.fish.pos.y,ZOOM_LEVELS[play.zoom])
 
 end
-
+local hue = 0
 function play:keypressed(key)
 
 	if key == "1" then
@@ -99,11 +99,30 @@ function play:keypressed(key)
 	elseif key == "8" then
 		Fish.randomize(play.fish)
 		Fish.render(play.fish)
+	elseif key == "9" then
+		local color = HSV(hue,255,255)
+		Logic.colorAll(play.fish,color)
+		Fish.render(play.fish)
+		hue = hue + 10
+		if hue > 255 then hue = hue - 255 end
+	elseif key == "0" then
+		play.fish.scale = play.fish.scale * FISH_GROWTH_PER_PLANET
 	end
 end
 
 local pulsepower = 0
 local isLocked = false
+
+function play:wheelmoved(x,y)
+	if y > 0 then
+		play.zoom = play.zoom + 1
+		if play.zoom > #ZOOM_LEVELS then play.zoom = #ZOOM_LEVELS end
+		play.camera:zoomTo(ZOOM_LEVELS[play.zoom])
+	elseif y < 0 and play.zoom > 1 then
+		play.zoom = play.zoom - 1
+		play.camera:zoomTo(ZOOM_LEVELS[play.zoom])
+	end
+end
 
 function play:mousepressed(x,y,button)
 	--[[if button == 1 then
@@ -117,6 +136,7 @@ function play:mousepressed(x,y,button)
 		direc = direc:trimmed(0.5)
 		play.fish.vector = play.fish.vector + direc
 	]]
+
 	if button == 1 then
 		local mx,my = play.camera:mousePosition()
 		local clicked, distance = Body.clickCheck(play.planets,mx,my,timepoint)
@@ -125,7 +145,7 @@ function play:mousepressed(x,y,button)
 			local x,y = play.fish.pos:unpack()
 			local bpos = Body.pos(clicked,timepoint)
 			local distanceToFish = VectorL.dist(x,y,bpos.x,bpos.y)
-			if distanceToFish < FISH_REACH+(clicked.size*10) then
+			if distanceToFish < (FISH_REACH*play.fish.scale)+(clicked.size*10) then
 				isLocked = Fish.lockToBody(play.fish,clicked)
 			end
 		end
@@ -227,13 +247,14 @@ function play:draw()
 	end
 	lg.print("Pulse: "..pulsepower,0,60)
 	lg.print("Angle: "..ANGLE,0,75)]]
-	
+	--lg.setColor(HSV(hue,255,255))
+	--lg.print(hue,0,0)
 end
 
 function play:update(dt)
 	timepoint = timepoint + dt
 	if love.mouse.isDown(1) then
-		pulsepower = pulsepower + dt
+		pulsepower = pulsepower + dt*PULSE_RATE
 		if pulsepower > MAX_PULSE then pulsepower = MAX_PULSE end
 	end
 	if love.mouse.isDown(2) and isLocked == false then
@@ -242,10 +263,15 @@ function play:update(dt)
 	
 	Fish.update(play.fish,play.camera,dt)
 	local x,y = play.fish.pos:unpack()
+	--local mx,my = love.mouse.getPosition()
+	--local mx,my = play.fish.vector:unpack()
+	--local w,h = lg.getWidth()/2, lg.getHeight()/2
+	--local mx, my = (mx - w), (my - h)
+	--mx,my = mx*10 , my*10 
+	
 	play.camera:lockPosition(x,y, CAMERA_SMOOTHER)
 	
-	--[[local mx,my = play.camera:mousePosition()
-	
+	--[[
 	local fpos = Vector(play.fish.pos.x,play.fish.pos.y)
 	local npos = fpos + play.fish.vector
 	local x,y = npos:unpack()

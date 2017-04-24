@@ -16,9 +16,12 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 	else
 		b.layers = {}
 		b.layers[1] = {variant = math.random(3,#assets.planet_layers[1]), eaten = false}
-		b.layers[2] = {variant = math.random(1,#assets.planet_layers[2]), eaten = false}
-		b.layers[3] = {variant = math.random(1,#assets.planet_layers[3]), eaten = false}
-		b.layers[4] = {variant = math.random(1,#assets.planet_layers[4]), eaten = false}
+		b.layers[2] = {variant = 0, eaten = true}
+		b.layers[3] = {variant = 0, eaten = true}
+		b.layers[4] = {variant = 0, eaten = true}
+		
+		local changeLayer = math.random(2,4)
+		b.layers[changeLayer] = {variant = math.random(1,#assets.planet_layers[changeLayer]), eaten = false}
 	end
 	return b
 end
