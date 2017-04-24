@@ -242,12 +242,14 @@ end
 
 function logic.consumeBody(body,fish)
 	for layer, variant in ipairs(body.layers) do
-		print("layer: "..layer.."  variant: "..variant.variant)
-		local callback = assets.planet_layers[layer][variant.variant].callback or nil
-		if callback then
-			callback(fish)
-			Fish.render(fish)
-			--variant.eaten = true
+		if variant.eaten == false  or layer == 1 then
+			print("layer: "..layer.."  variant: "..variant.variant)
+			local callback = assets.planet_layers[layer][variant.variant].callback or nil
+			if callback then
+				callback(fish)
+				Fish.render(fish)
+				--variant.eaten = true
+			end
 		end
 	end
 	Body.damage(body)

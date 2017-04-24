@@ -24,7 +24,15 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 end
 
 function body.damage(self)
-	self.isPlanet = false
+	local nonEaten = 0
+	for i, layer in ipairs(self.layers) do if layer.eaten == false then nonEaten = nonEaten + 1 end end
+	if nonEaten > 1 then
+		local choice = math.random(2,#self.layers)
+		self.layers[choice].eaten = true
+	else
+		self.layers[1].variant = 2
+		self.isPlanet = false
+	end	
 end
 
 function body.pos(self,timepoint)

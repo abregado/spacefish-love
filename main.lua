@@ -18,12 +18,9 @@ function love.mousepressed(x,y,button)
 end
 
 --[[
-fish rotates toward mouse when unlocked
-fish rotates toward planet when locked
+TODOS
 slow rotation
-clicking adds movment in direction that you are facing
 right clicking moves speed toward tangental orbital velocity
-
 
 two canvas, one fades in
 
