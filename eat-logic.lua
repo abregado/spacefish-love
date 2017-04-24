@@ -120,7 +120,7 @@ function logic.chooseColorChange(fish,parts,color)
 	--remove parts which are alrady this color
 	local removals = 0
 	for i, part in ipairs(parts) do
-		if fish.parts[part].color[1] == color[1] and
+		if fish.parts[part].color and fish.parts[part].color[1] == color[1] and
 		fish.parts[part].color[2] == color[2] and
 		fish.parts[part].color[3] == color[3] then
 			removals = removals + 1
@@ -128,7 +128,7 @@ function logic.chooseColorChange(fish,parts,color)
 	end
 	while removals > 0 do
 		for i, part in ipairs(parts) do
-		if fish.parts[part].color[1] == color[1] and
+		if fish.parts[part].color and fish.parts[part].color[1] == color[1] and
 		fish.parts[part].color[2] == color[2] and
 		fish.parts[part].color[3] == color[3] then
 				table.remove(parts,i)
