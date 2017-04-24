@@ -21,17 +21,26 @@ function play:enter()
 	--planets[3].size = 0.25	
 	
 	local distance = 500
+	local maxplanets = 1
 	for p = 0, 10 do
-		distance = distance + math.random(350,550)
-		local newplanet = Body.new(sun,
-			distance, --orbital distance
-			1+math.random(1,2), --orbital speed
-			math.pi*2*math.random(), --random starting offset
-			4+(2*math.random()), --size
-			{171,191,0},
-			true --color
-			)
-		table.insert(planets,newplanet)
+		distance = distance + math.random(500,3000)
+		local planetshere = math.floor(math.random(math.floor(maxplanets/2),maxplanets))
+		local startoff = math.pi*2*math.random()
+		local step = math.pi*2/(planetshere+5)
+		for pl=0, planetshere do
+			
+			local newplanet = Body.new(sun,
+				distance, --orbital distance
+				1+math.random(1,2)/distance*1000, --orbital speed
+				startoff+(step*pl), --random starting offset
+				4+(4*math.random()), --size
+				{171,191,0}, -- color
+				true --is real planet
+				)
+			table.insert(planets,newplanet)
+		end
+		maxplanets = maxplanets + 1
+		if maxplanets > 3 then maxplanets = 3 end
 	end
 	
 	local moons = {}
@@ -168,6 +177,24 @@ function play:draw()
 	--draw orbit rings
 	for i, planet in ipairs(play.planets) do
 		if planet.isPlanet == true then
+			--[[lg.setBlendMode("alpha")
+			local bpos = Body.pos(planet,timepoint)
+			local centre = Vector(GLOBAL_CENTREPOINT_X,GLOBAL_CENTREPOINT_Y)
+			local bvec = Vector(bpos.x,bpos.y)
+			local angle = bvec:angleTo(centre)
+			
+			local arcLength = math.pi/10
+			local arcSegs = 10
+			local shadestep = 255/arcSegs
+			
+			lg.setColor(255,255,255)
+			lg.arc("line","open",GLOBAL_CENTREPOINT_X,GLOBAL_CENTREPOINT_Y,planet.distance,angle,angle+0.1,150)
+			
+			
+			--for seg=0,arcSegs do
+			--	local shade = 255-(seg*shadestep)
+			--	lg.setColor(shade,shade,shade)
+			--end]]
 			--main planet
 			lg.setColor(40,40,40)
 			lg.circle("line",GLOBAL_CENTREPOINT_X,GLOBAL_CENTREPOINT_Y,planet.distance,150)

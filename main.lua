@@ -22,8 +22,7 @@ TODOS
 slow rotation
 right clicking moves speed toward tangental orbital velocity
 
-two canvas, one fades in
+better orbit rings
 
-sun and background placed in world
 
 ]]
