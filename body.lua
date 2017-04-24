@@ -15,7 +15,7 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 			}
 	else
 		b.layers = {}
-		b.layers[1] = {variant = math.random(1,#assets.planet_layers[1]), eaten = false}
+		b.layers[1] = {variant = math.random(3,#assets.planet_layers[1]), eaten = false}
 		b.layers[2] = {variant = math.random(1,#assets.planet_layers[2]), eaten = false}
 		b.layers[3] = {variant = math.random(1,#assets.planet_layers[3]), eaten = false}
 		b.layers[4] = {variant = math.random(1,#assets.planet_layers[4]), eaten = false}
@@ -24,15 +24,28 @@ function body.new(parent,distance,speed,offset,size,color,isPlanet)
 end
 
 function body.damage(self)
-	local nonEaten = 0
-	for i, layer in ipairs(self.layers) do if layer.eaten == false then nonEaten = nonEaten + 1 end end
-	if nonEaten > 1 then
-		local choice = math.random(2,#self.layers)
-		self.layers[choice].eaten = true
+	if self.layers[1].variant == 2 then
+		self.isPlanet = false
+		self.layers[1].variant = 1
+	else
+		for i, layer in ipairs(self.layers) do
+			if i == 1 then
+				layer.variant = 2
+			else
+				layer.eaten = true
+			end
+		end
+	end
+	--[[local nonEaten = {}
+	for i, layer in ipairs(self.layers) do if layer.eaten == false and i > 1 then table.insert(nonEaten,layer) end end
+	
+	if #nonEaten > 1 then
+		local choice = math.random(1,#nonEaten) 
+		nonEaten[choice].eaten = true
 	else
 		self.layers[1].variant = 2
 		self.isPlanet = false
-	end	
+	end	]]
 end
 
 function body.pos(self,timepoint)
@@ -50,8 +63,8 @@ end
 function body.draw(self,timepoint)
 	--TODO: planet surfaces rotate to face the galactic centre
 	local pos = body.pos(self,timepoint)
-	lg.setColor(self.color)
-	lg.circle("fill",pos.x,pos.y,10*self.size,30)
+	--lg.setColor(self.color)
+	--lg.circle("fill",pos.x,pos.y,10*self.size,30)
 
 	if self.parent then
 		local diameter = self.size*10
@@ -64,7 +77,20 @@ function body.draw(self,timepoint)
 				lg.draw(image,pos.x,pos.y,1,ratio,ratio,image:getWidth()/2,image:getHeight()/2)
 			end
 		end
+	else
+		--draw sun
+		local diameter = self.size*10
+		local ratio = diameter/256
 		
+		lg.setBlendMode("add")
+		lg.setColor(255,255,255,64)
+		for i, layer in ipairs(self.layers) do
+			if layer.variant > 0 and layer.eaten == false then
+				local image = assets.sun
+				lg.draw(image,pos.x,pos.y,1,ratio,ratio,image:getWidth()/2,image:getHeight()/2)
+			end
+		end
+		lg.setBlendMode("alpha")
 	end
 end
 

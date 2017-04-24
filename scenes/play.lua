@@ -146,6 +146,11 @@ end
 
 
 function play:draw()
+	
+	local w,h = assets.background:getWidth(), assets.background:getHeight()
+	local ww,wh = lg:getWidth(), lg:getHeight()
+	lg.draw(assets.background,ww/2-w,wh/2-h,0,2,2)
+
 	--Draw game world
 	play.camera:attach()
 	
@@ -162,7 +167,7 @@ function play:draw()
 	
 	--draw orbit rings
 	for i, planet in ipairs(play.planets) do
-		if planet.parent == play.planets[1] then
+		if planet.isPlanet == true then
 			--main planet
 			lg.setColor(40,40,40)
 			lg.circle("line",GLOBAL_CENTREPOINT_X,GLOBAL_CENTREPOINT_Y,planet.distance,150)
@@ -181,7 +186,7 @@ function play:draw()
 	play.camera:detach()
 	
 	--draw UI
-	lg.setColor(255,255,255)
+	--[[lg.setColor(255,255,255)
 	lg.print("playstate is working",0,15)
 	local mx,my = play.camera:mousePosition()
 	mx,my = math.floor(mx), math.floor(my)
@@ -194,7 +199,8 @@ function play:draw()
 		lg.print("movement free",0,45)
 	end
 	lg.print("Pulse: "..pulsepower,0,60)
-	lg.print("Angle: "..ANGLE,0,75)
+	lg.print("Angle: "..ANGLE,0,75)]]
+	
 end
 
 function play:update(dt)

@@ -40,8 +40,9 @@ ANGLE = 0
 assets = {}
 assets.planet_layers = {}
 assets.planet_layers[1] = {
-	{image = lg.newImage("assets/P_Background_1_Earth.png"), callback = function(fish) Logic.planet.earth(fish) end},
+	{image = lg.newImage("assets/P_Top2_1_Asteroids.png")},
 	{image = lg.newImage("assets/P_Background_2_Barren.png"), callback = function(fish) Logic.planet.barren(fish) end},
+	{image = lg.newImage("assets/P_Background_1_Earth.png"), callback = function(fish) Logic.planet.earth(fish) end},
 	{image = lg.newImage("assets/P_Background_3_Mars.png"), callback = function(fish) Logic.planet.mars(fish) end},
 	{image = lg.newImage("assets/P_Background_4_Swamp.png"), callback = function(fish) Logic.planet.swamp(fish) end},
 	{image = lg.newImage("assets/P_Background_5_Broken1.png"), callback = function(fish) Logic.planet.broken(fish) end},
@@ -70,7 +71,8 @@ assets.planet_layers[4] = {
 	{image = lg.newImage("assets/P_Top2_2_Butterflies.png"), callback = function(fish) Logic.planet.butterfly(fish) end}
 	}
 
-
+assets.sun = lg.newImage("assets/sun.png")
+assets.background = lg.newImage("assets/space_background.png")
 
 assets.monster = {}
 assets.monster.body = {}
